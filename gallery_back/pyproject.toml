@@ -1,0 +1,14 @@
+[project]
+name = "gallery-back"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.20.0",
+    "fastapi[standard]>=0.143.0",
+    "oracledb>=26.0.1",
+    "pwdlib[argon2]>=0.3.1",
+    "pyjwt>=2.15.1",
+    "sqlalchemy==2.0.52",
+]
