@@ -29,3 +29,32 @@ export const signup = async (data: UserSignupRequest): Promise<UserSignupRespons
 
   return response.json();
 };
+
+// 로그인 요청 데이터
+export interface UserLoginRequest {
+  email: string;
+  password: string;
+}
+
+// 로그인 성공 응답 데이터
+export interface UserLoginResponse {
+  access_token: string;
+  token_type: string;
+}
+
+// 로그인 API
+export const signin = async (data: UserLoginRequest): Promise<UserLoginResponse> => {
+  const response = await fetch("http://127.0.0.1:8000/users/signin", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`로그인 요청 실패 (${response.status})`);
+  }
+
+  return response.json();
+};
