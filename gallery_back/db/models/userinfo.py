@@ -1,5 +1,5 @@
 from db.database import Base
-from sqlalchemy import Identity, DateTime, String, Integer, Enum as SQLEnum
+from sqlalchemy import Identity, DateTime, String, Integer, Enum as SQLEnum, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from enum import Enum
@@ -48,6 +48,9 @@ class UserInfo(Base):
 
     # 성별
     gender: Mapped[Gender] = mapped_column(SQLEnum(Gender, native_enum=False, length=10, create_constraint=True),nullable=False)
+
+    # 승인여부(관리자)
+    allow: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
 
     # 댓글과 연동
     comments: Mapped[list["Comment"]] = relationship(back_populates="userInfo")
