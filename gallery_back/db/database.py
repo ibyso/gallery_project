@@ -8,7 +8,7 @@ database_url = URL.create(
     password=settings.oracle_password,
     host="localhost",
     port=1522,
-    query={"service_name":"FREEPDB1"}
+    query={"service_name": "XEPDB1"},
 )
 
 engine = create_engine(database_url, echo=True)
