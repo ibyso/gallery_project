@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from gallery_back.admin.migration.external_api import fetch_posts,fetch_posts_common,fetch_posts_intro
+from admin.migration.external_api import fetch_posts,fetch_posts_common,fetch_posts_intro
 import httpx
 
 migration_router = APIRouter(tags=["Migration"])
