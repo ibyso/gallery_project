@@ -1,3 +1,7 @@
+import axios from "axios";
+
+const url = "http://127.0.0.1:8000/festivals";
+
 export const getFestivals = async () => {
   const params = new URLSearchParams({
     MobileOS: "ETC",
@@ -17,4 +21,9 @@ export const getFestivals = async () => {
   const data = await response.json();
 
   return data;
+};
+
+export const getFestival = async (content_id: number) => {
+  const response = await axios.get(`${url}/${content_id}`);
+  return response.data;
 };

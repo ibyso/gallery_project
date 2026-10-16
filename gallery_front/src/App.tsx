@@ -39,6 +39,7 @@ function App({ currentUserId = null }: AppProps) {
     setComment,
     addComment,
     updateComment,
+    removeComment,
     isLoggedIn,
     canEditComment,
     closeModal,
@@ -74,11 +75,13 @@ function App({ currentUserId = null }: AppProps) {
       {/* 모달 */}
       {selectedPost && (
         <PostModal
+          key={`${selectedPost.id}:${currentUserId}`}
           selectedPost={selectedPost}
           comment={comment}
           setComment={setComment}
           addComment={addComment}
           updateComment={updateComment}
+          removeComment={removeComment}
           isLoggedIn={isLoggedIn}
           canEditComment={canEditComment}
           closeModal={closeModal}

@@ -8,15 +8,15 @@ export const postComment = async (comment: CommentCreate) => {
   return response.data;
 };
 
-export const putComment = async (comment_id: number) => {
-  const response = await axios.post(`${url}/${comment_id}`);
-  return response.data;
-};
-
-export const deleteComment = async (
+export const putComment = async (
   comment_id: number,
   comment: CommentUpdate,
 ) => {
   const response = await axios.post(`${url}/${comment_id}`, comment);
+  return response.data;
+};
+
+export const deleteComment = async (comment_id: number) => {
+  const response = await axios.post(`${url}/${comment_id}`);
   return response.data;
 };
