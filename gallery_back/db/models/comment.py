@@ -16,4 +16,4 @@ class Comment(Base):
     content_id: Mapped[int] = mapped_column(ForeignKey("festivals.id"), nullable=False)
 
     userInfo: Mapped["UserInfo"] = relationship(back_populates="comments")
-    festival: Mapped["Festival"] = relationship(back_populates="comments")
+    festivals: Mapped["Festival"] = relationship(back_populates="comments")

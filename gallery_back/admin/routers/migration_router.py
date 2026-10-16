@@ -7,6 +7,9 @@ from admin.services.migration import create
 from db.database import get_db
 import httpx
 
+# userinfo 모델 import missing 오류 방지용
+from db.models.userinfo import UserInfo
+
 migration_router = APIRouter(tags=["Migration"])
 
 @migration_router.get("/migration")
@@ -71,8 +74,8 @@ async def get_migration(db: Session = Depends(get_db)) :
         return {
             "total_count": len(items),
             "success_count": success_count,
-            # "result": result,
-            "items": items
+            "result": result,
+            # "items": items
         }
 
     except HTTPException:
