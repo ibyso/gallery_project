@@ -1,7 +1,8 @@
 from db.database import Base
 from sqlalchemy import Identity, DateTime, String, Integer, Numeric, Integer
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
+from sqlalchemy.dialects.oracle import CLOB
 
 class Festival(Base):
 
@@ -19,10 +20,10 @@ class Festival(Base):
     tel: Mapped[str] = mapped_column(String(13))
     zipcode : Mapped[int] = mapped_column(Integer)
     homepage: Mapped[str] = mapped_column(String(200))
-    overview: Mapped[str] = mapped_column(String(1000))
+    overview: Mapped[str] = mapped_column(String(4000))
     playtime: Mapped[str] = mapped_column(String(20))
     eventplace: Mapped[str] = mapped_column(String(200))
-    program: Mapped[str] = mapped_column(String(2000))
+    program: Mapped[str] = mapped_column(CLOB)
     posted_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     is_public:Mapped[bool] = mapped_column(default=True)
     is_delete:Mapped[bool] = mapped_column(default=False)
