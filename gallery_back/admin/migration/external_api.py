@@ -6,12 +6,12 @@ import xmltodict
 
 url = "http://apis.data.go.kr/B551011/KorService2/"
 
-async def fetch_posts():
+async def fetch_posts(pageNo: int = 1, numOfRows: int = 10):
     option = "searchFestival2"
 
     params = {
-        "numOfRows" : 3,
-        "pageNo" : 1,
+        "numOfRows" : numOfRows,
+        "pageNo" : pageNo,
         "MobileOS" : "WEB",
         "MobileApp" : "festival_gallery",
         "eventStartDate" : datetime.now().strftime("%Y%m%d"),  
