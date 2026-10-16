@@ -18,11 +18,11 @@ class migrationInsert(BaseModel):
     mapx: Decimal | None = Field(None, max_digits=13, decimal_places=10)
     mapy: Decimal | None = Field(None, max_digits=13, decimal_places=10)
 
-    tel: str | None = Field(None, max_length=13)
+    tel: str | None = Field(None, max_length=50)
     zipcode: int | None = None
 
     homepage: str | None = Field(None, max_length=200)
-    overview: str | None = Field(None, max_length=200)
-    playtime: str | None = Field(None, max_length=200)
-    eventplace: str | None = Field(None, max_length=200)
-    program: str | None = Field(None, max_length=2000)
+    overview: str | None = Field(None, max_length=4000)
+    playtime: str | None = Field(None, max_length=100)
+    eventplace: str | None = Field(None, max_length=500)
+    program: str | None = None

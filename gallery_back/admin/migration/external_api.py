@@ -10,7 +10,7 @@ async def fetch_posts():
     option = "searchFestival2"
 
     params = {
-        "numOfRows" : 5,
+        "numOfRows" : 3,
         "pageNo" : 1,
         "MobileOS" : "WEB",
         "MobileApp" : "festival_gallery",
