@@ -6,5 +6,6 @@ class Settings(BaseSettings):
     oracle_user: str = Field(alias="ORACLE_USER")
     oracle_password: str = Field(alias="ORACLE_PASSWORD")
     secret_key: str = Field(alias="SECRET_KEY")
+    service_key: str = Field(alias="SERVICE_KEY")
 
 settings = Settings()

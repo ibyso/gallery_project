@@ -1,0 +1,18 @@
+FIELD_MAPPING = {
+    "contentid": "id",
+    "title": "title",
+    "addr1": "addr1",
+    "addr2": "addr2",
+    "eventstartdate": "startdate",
+    "eventenddate": "enddate",
+    "firstimage2": "thumbnail",
+    "mapx": "mapx",
+    "mapy": "mapy",
+    "tel": "tel",
+    "zipcode": "zipcode",
+    "homepage": "homepage",
+    "overview": "overview",
+    "playtime": "playtime",
+    "eventplace": "eventplace",
+    "program": "program",
+}
