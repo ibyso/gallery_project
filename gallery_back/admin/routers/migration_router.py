@@ -1,11 +1,16 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+
+from fastapi import APIRouter, HTTPException, Depends
 from admin.migration.external_api import fetch_posts,fetch_posts_common,fetch_posts_intro
+from admin.migration.mapping_field import FIELD_MAPPING
+from sqlalchemy.orm import Session
+from admin.services.migration import create
+from db.database import get_db
 import httpx
 
 migration_router = APIRouter(tags=["Migration"])
 
 @migration_router.get("/migration")
-async def get_migration() :
+async def get_migration(db: Session = Depends(get_db)) :
     try:
         response = await fetch_posts()
         header = response["response"]["header"]
@@ -27,6 +32,7 @@ async def get_migration() :
 
         success_count = 0
         failed_items = []
+        mapped_data = []
 
         for item in items:
             content_id = item.get("contentid")
@@ -51,16 +57,21 @@ async def get_migration() :
                     item["program"] = intro_body["items"]["item"]['program']
                     success_count += 1
 
-                
-
+                mapped_data.append({
+                    db_key: item[api_key]
+                    for api_key, db_key in FIELD_MAPPING.items()
+                    if api_key in item
+                })
 
             except httpx.HTTPError:
                 failed_items.append(content_id)
 
+        result = create(db=db, datas=mapped_data)
+
         return {
             "total_count": len(items),
             "success_count": success_count,
-            "failed_items": failed_items,
+            # "result": result,
             "items": items
         }
 
