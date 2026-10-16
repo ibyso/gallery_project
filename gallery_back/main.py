@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from board.festivalComments.routers.comment_router import comment_router
 from admin.routers.migration_router import migration_router
-from member_user.routers.userinfo_router import userinfo_router  # 추가
+from userinfo.routers.userinfo_router import userinfo_router  # 추가
 
 app = FastAPI(title="Galley Project API", version="0.1.0")
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
+import { signin } from "../apis/userApi";
 
 interface UserLogin {
   email: string;
@@ -13,8 +14,11 @@ const LoginPage = () => {
     password: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const { email, password } = loginForm;
 
+  // 이메일, 비밀번호 입력값 변경
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -22,14 +26,38 @@ const LoginPage = () => {
       ...prevForm,
       [name]: value,
     }));
+
+    setErrorMessage("");
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  // 로그인 버튼 클릭
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 실제 로그인 API는 다음 단계에서 연결
-    console.log("로그인 입력값:", loginForm.email);
-    alert("로그인 API는 아직 연결되지 않았습니다.");
+    setErrorMessage("");
+
+    console.log("로그인 버튼 클릭 확인");
+
+    try {
+      // FastAPI 로그인 요청
+      const result = await signin({
+        email,
+        password,
+      });
+
+      // 로그인 성공 여부 확인
+      console.log("로그인 성공:", result.token_type);
+
+      alert("로그인에 성공했습니다.");
+    } catch (error) {
+      console.error("로그인 오류:", error);
+
+      if (error instanceof Error && error.message.includes("401")) {
+        setErrorMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
+      } else {
+        setErrorMessage("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      }
+    }
   };
 
   return (
@@ -79,7 +107,8 @@ const LoginPage = () => {
               className="w-full rounded-lg border border-gray-200 px-4 py-3 outline-none focus:border-[#58654f]"
             />
           </div>
-
+          {/* 로그인 오류 메시지 */}
+          {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
           <button
             type="submit"
             className="w-full cursor-pointer rounded-lg bg-[#58654f] py-3 font-semibold text-white hover:bg-[#45513e]"

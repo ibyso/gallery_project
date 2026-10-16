@@ -3,7 +3,7 @@ from core.config import settings
 from datetime import datetime, timedelta, timezone
 import jwt
 from jwt.exceptions import InvalidTokenError
-from exceptions.userinfo import UserCredentialsException
+from userinfo.exceptions.userinfo import UserCredentialsException
 
 def verify_access_token(token:str) -> dict:
     """
