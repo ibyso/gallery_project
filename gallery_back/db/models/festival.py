@@ -24,7 +24,7 @@ class Festival(Base):
     tel: Mapped[str] = mapped_column(String(50), nullable=True)
     zipcode : Mapped[int] = mapped_column(Integer, nullable=True)
     homepage: Mapped[str] = mapped_column(String(200), nullable=True)
-    overview: Mapped[str] = mapped_column(String(4000, nullable=True))
+    overview: Mapped[str] = mapped_column(String(4000), nullable=True)
     playtime: Mapped[str] = mapped_column(String(100), nullable=True)
     eventplace: Mapped[str] = mapped_column(String(500), nullable=True)
     program: Mapped[str] = mapped_column(CLOB, nullable=True)
