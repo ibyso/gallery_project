@@ -1,0 +1,2 @@
+class CommentNotFoundException(Exception):
+    pass
