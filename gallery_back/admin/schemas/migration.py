@@ -15,8 +15,8 @@ class migrationInsert(BaseModel):
 
     thumbnail: str | None = Field(None, max_length=200)
 
-    mapx: Decimal | None = Field(None, max_digits=13, decimal_places=10)
-    mapy: Decimal | None = Field(None, max_digits=13, decimal_places=10)
+    mapx: Decimal | None = Field(None, max_digits=20, decimal_places=16)
+    mapy: Decimal | None = Field(None, max_digits=20, decimal_places=16)
 
     tel: str | None = Field(None, max_length=50)
     zipcode: int | None = None
