@@ -12,6 +12,7 @@ config = context.config
 from db.database import engine, Base
 from db.models.festival import Festival
 from db.models.userinfo import UserInfo
+from db.models.comment import Comment
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
