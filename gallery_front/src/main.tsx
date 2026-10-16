@@ -11,7 +11,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        {/* <Route path="/" element={<App />} /> */}
+        <Route path="/" element={<App currentUserId={1} />} />
         <Route path="/users/signin" element={<LoginPage />} />
         <Route path="/users/signup" element={<SignupPage />} />
       </Routes>

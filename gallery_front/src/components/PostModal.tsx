@@ -7,6 +7,7 @@ interface PostModalProps {
   setComment: (value: string) => void;
   addComment: () => void;
   updateComment: (commentIndex: number, updatedComment: string) => void;
+  removeComment: (commentIndex: number) => boolean;
   isLoggedIn: boolean;
   canEditComment: (commentIndex: number) => boolean;
   closeModal: () => void;
@@ -18,6 +19,7 @@ function PostModal({
   setComment,
   addComment,
   updateComment,
+  removeComment,
   isLoggedIn,
   canEditComment,
   closeModal,
@@ -99,6 +101,7 @@ function PostModal({
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-xs font-semibold">익명</p>
                     {editingIndex !== index && canEditComment(index) && (
+                      <div className="flex gap-3">
                       <button
                         type="button"
                         onClick={() => startEdit(index, text)}
@@ -106,6 +109,16 @@ function PostModal({
                       >
                         수정
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (removeComment(index)) cancelEdit();
+                        }}
+                        className="cursor-pointer text-xs text-red-500 hover:text-red-700"
+                      >
+                        삭제
+                      </button>
+                      </div>
                     )}
                   </div>
 
