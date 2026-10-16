@@ -6,7 +6,11 @@ import Pagination from "./components/Pagination";
 import PostModal from "./components/PostModal";
 import { usePosts } from "./hooks/usePosts";
 
-function App() {
+interface AppProps {
+  currentUserId?: string | number | null;
+}
+
+function App({ currentUserId = null }: AppProps) {
   // 한국관광공사 축제 API 테스트
   useEffect(() => {
     const fetchFestivals = async () => {
@@ -34,13 +38,20 @@ function App() {
     comment,
     setComment,
     addComment,
+    updateComment,
+    isLoggedIn,
+    canEditComment,
     closeModal,
-  } = usePosts();
+  } = usePosts(currentUserId);
 
   return (
     <div className="min-h-screen text-[#292c28]">
       {/* 헤더 */}
-      <Header search={search} setSearch={setSearch} setCurrentPage={setCurrentPage} />
+      <Header
+        search={search}
+        setSearch={setSearch}
+        setCurrentPage={setCurrentPage}
+      />
       {/* 메인 콘텐츠 */}
       <main className="mx-auto max-w-7xl px-6 py-12">
         <h2 className="mb-3 text-3xl font-semibold">일상의 장면을 모으다</h2>
@@ -67,6 +78,9 @@ function App() {
           comment={comment}
           setComment={setComment}
           addComment={addComment}
+          updateComment={updateComment}
+          isLoggedIn={isLoggedIn}
+          canEditComment={canEditComment}
           closeModal={closeModal}
         />
       )}
