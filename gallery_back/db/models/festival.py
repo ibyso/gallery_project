@@ -1,5 +1,5 @@
 from db.database import Base
-from sqlalchemy import Identity, DateTime, String, Integer, Numeric, Integer
+from sqlalchemy import Identity, DateTime, String, Integer, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy.dialects.oracle import CLOB

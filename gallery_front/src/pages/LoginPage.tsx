@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { ChangeEvent, SubmitEvent } from "react";
 import { signin } from "../apis/userApi";
+import { useAuth } from "../common/AuthContext";
 
 interface UserLogin {
   email: string;
@@ -9,6 +10,8 @@ interface UserLogin {
 }
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [loginForm, setLoginForm] = useState<UserLogin>({
     email: "",
     password: "",
@@ -39,16 +42,16 @@ const LoginPage = () => {
     console.log("로그인 버튼 클릭 확인");
 
     try {
-      // FastAPI 로그인 요청
-      const result = await signin({
-        email,
-        password,
-      });
+      const result = await signin({ email, password });
 
-      // 로그인 성공 여부 확인
+      // JWT 토큰 저장 및 로그인 상태 변경
+      login(result.access_token);
+
       console.log("로그인 성공:", result.token_type);
-
       alert("로그인에 성공했습니다.");
+
+      // 로그인 성공 후 메인 페이지로 이동
+      navigate("/");
     } catch (error) {
       console.error("로그인 오류:", error);
 
