@@ -40,8 +40,8 @@ class UserInfoCreate(BaseModel):
     email: EmailStr
     name: str = Field(min_length=1, max_length=30)
     password: Password
-    age: int = Field(ge=0, le=120)
-    gender: Gender
+    age: int | None = Field(None, ge=0, le=120)
+    gender: Gender | None = None
 
 
 # 회원가입 응답 데이터

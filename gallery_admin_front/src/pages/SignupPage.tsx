@@ -1,38 +1,62 @@
 import React, { useState } from "react";
-import { FiLogIn, FiUser } from "react-icons/fi";
+import { FiLogIn } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
+import { signup } from "../apis/userApi";
+import axios from "axios";
 
 const SignupPage = () => {
   const navigate = useNavigate();
 
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    name: "",
+    password: "",
+    passwordCheck: "",
+  });
+  const { email, name, password, passwordCheck } = form;
   const [error, setError] = useState("");
 
-  // 로그인 처리
-  const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
+  const [isLoading, setIsLoading] = useState(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    if (!userId.trim() || !password) {
-      setError("아이디와 비밀번호를 입력해주세요.");
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@!$*-]).{8,64}$/;
+  const handleSubmit = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+    if (!passwordRegex.test(password)) {
+      setError("비밀번호는 대소문자와 숫자, 특수문자(@!$*-)를 각 1자 이상 포함한 8자리 이상이어야 합니다.");
       return;
     }
-
-    setIsLoading(true);
-
+    if (password !== passwordCheck) {
+      setError("비밀번호와 비밀번호 확인이 다릅니다.");
+      return;
+    }
     try {
-      // 임시 로그인 처리
-      console.log("로그인 요청:", { userId });
-
-      navigate("/admin", { replace: true });
-    } catch {
-      setError("로그인에 실패했습니다. 다시 시도해주세요.");
+      setIsLoading(true);
+      const result = await signup({
+        email: email,
+        name: name,
+        password: password,
+      });
+      alert(`${result.user_id}님 ${result.message}`);
+      navigate("/login");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const detail = error.response?.data.detail;
+        if (Array.isArray(detail)) {
+          setError(detail[0].msg ?? "회원가입에 실패했습니다.");
+        } else {
+          setError(detail ?? "회원가입에 실패했습니다.");
+        }
+      } else {
+        setError(String(error));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -53,19 +77,7 @@ const SignupPage = () => {
         </div>
 
         {/* 로그인 폼 */}
-        <form onSubmit={handleLogin} className="space-y-5">
-          {/* 아이디 */}
-          <InputField
-            label="아이디"
-            id="userId"
-            name="userId"
-            type="text"
-            value={userId}
-            icon={FiUser}
-            onChange={(e) => setUserId(e.target.value)}
-            placeholder="아이디를 입력하세요"
-          />
-
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* 이메일 */}
           <InputField
             label="이메일"
@@ -73,7 +85,7 @@ const SignupPage = () => {
             name="email"
             type="text"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChange}
             placeholder="이메일을 입력하세요"
           />
 
@@ -84,7 +96,7 @@ const SignupPage = () => {
             name="name"
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleChange}
             placeholder="이름을 입력하세요"
           />
 
@@ -95,18 +107,18 @@ const SignupPage = () => {
             name="password"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChange}
             placeholder="비밀번호를 입력하세요"
           />
 
           {/* 비밀번호 확인 */}
           <InputField
             label="비밀번호"
-            id="confirmPassword"
-            name="confirmPassword"
+            id="passwordCheck"
+            name="passwordCheck"
             type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={passwordCheck}
+            onChange={handleChange}
             placeholder="비밀번호 확인"
           />
 
@@ -117,7 +129,7 @@ const SignupPage = () => {
             </p>
           )}
 
-          {/* 로그인 버튼 */}
+          {/* 회원가입 버튼 */}
           <button
             type="submit"
             disabled={isLoading}

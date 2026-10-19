@@ -60,7 +60,6 @@ def authenticate_user(
     # 4. 인증 성공 시 회원 정보 반환
     return user
 
-
 # 사용자 ID로 회원 정보 조회
 def get_user(db: Session, user_id: int) -> UserInfo:
 
