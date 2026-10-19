@@ -13,9 +13,9 @@ from db.models.userinfo import UserInfo
 migration_router = APIRouter(tags=["Migration"])
 
 @migration_router.get("/migration")
-async def get_migration(db: Session = Depends(get_db)) :
+async def get_migration(db: Session = Depends(get_db),pageNo: int = 1, numOfRows: int = 10) :
     try:
-        response = await fetch_posts()
+        response = await fetch_posts(pageNo,numOfRows)
         header = response["response"]["header"]
 
         result_code = header.get("resultCode")
@@ -69,13 +69,11 @@ async def get_migration(db: Session = Depends(get_db)) :
             except httpx.HTTPError:
                 failed_items.append(content_id)
 
-        result = create(db=db, datas=mapped_data)
+        create(db=db, datas=mapped_data)
 
         return {
             "total_count": len(items),
-            "success_count": success_count,
-            "result": result,
-            # "items": items
+            "success_count": success_count
         }
 
     except HTTPException:
