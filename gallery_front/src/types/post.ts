@@ -5,6 +5,8 @@ export interface Post {
   id: number;
   title: string;
   image: string;
+  startdate?: string | null;
+  enddate?: string | null;
   comments: string[];
 }
 
@@ -17,3 +19,11 @@ export type FestivalResponse = {
   user: UserResponse;
   comments: CommentResponse[];
 };
+
+export interface FestivalListItem {
+  id: number;
+  title: string;
+  thumbnail: string | null;
+  startdate: string | null;
+  enddate: string | null;
+}

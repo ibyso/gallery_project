@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import Header from "./components/Header";
-import { getFestivals } from "./apis/festivalApi";
 import PostGrid from "./components/PostGrid";
 import Pagination from "./components/Pagination";
 import PostModal from "./components/PostModal";
@@ -11,21 +9,6 @@ interface AppProps {
 }
 
 function App({ currentUserId = null }: AppProps) {
-  // 한국관광공사 축제 API 테스트
-  useEffect(() => {
-    const fetchFestivals = async () => {
-      try {
-        const data = await getFestivals();
-
-        console.log("축제 API 데이터:", data);
-      } catch (error) {
-        console.error("축제 API 오류:", error);
-      }
-    };
-
-    fetchFestivals();
-  }, []);
-
   const {
     search,
     setSearch,
