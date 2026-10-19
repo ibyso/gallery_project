@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from ..schemas.comment_schemas import CommentCreate, CommentUpdate
 from db.models.comment import Comment
 from ..exceptions.comment_exception import CommentNotFoundException
+from sqlalchemy import select
 
 
 # 댓글 작성
@@ -13,6 +14,24 @@ def comment_create(data: CommentCreate, db: Session):
     db.refresh(comment)
 
     return comment
+
+
+# 댓글 조회
+def get_comments_by_content_id(content_id: int, db: Session):
+    stmt = select(Comment).where(Comment.content_id == content_id).order_by(Comment.created_at.asc())
+    comments = db.scalars(stmt).all()
+
+    return [
+        {
+            "comment_id": comment.comment_id,
+            "content_id": comment.content_id,
+            "user_id": comment.user_id,
+            "body": comment.body,
+            "created_at": comment.created_at,
+            "updated_at": comment.updated_at,
+        }
+        for comment in comments
+    ]
 
 
 # 댓글 수정
