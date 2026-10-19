@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from db.models.userinfo import UserInfo, UserRole
+from db.models.userinfo import UserInfo, UserRole, Gender
 from admin.schemas.userinfo import UserInfoCreate, Token
 from core.security import hash_password, verify_password
 from userinfo.exceptions.userinfo import UserAlreadyExistsException, InvalidPasswordException, UserNotFoundException
@@ -23,8 +23,8 @@ def register_admin(db: Session, data: UserInfoCreate) -> UserInfo:
         email=data.email,
         name=data.name,
         password=hash_password(data.password),
-        age=data.age,
-        gender=data.gender,
+        age=100,    # 임시값 입력
+        gender=Gender.Male, # 임시값 입력
         role=UserRole.Manager,
     )
 
@@ -52,12 +52,3 @@ def authenticate_admin(db: Session,email: str,password: str) -> UserInfo | None:
     access_token = create_access_token(data={"sub":str(user.user_id)})
 
     return Token(access_token=access_token, token_type="bearer")
-
-
-# 현재 로그인 된 사용자를 반환
-def get_user(db: Session, user_id:int) -> UserInfo :
-    user =db.get(UserInfo, user_id)
-    if user is None :
-        raise UserNotFoundException
-
-    return user
