@@ -50,7 +50,7 @@ const LoginPage = () => {
             <FiLogIn size={26} />
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-800">WORKSPACE</h1>
+          <h1 className="text-2xl font-bold text-slate-800">로그인</h1>
 
           <p className="mt-2 text-sm text-slate-500">그룹웨어 관리자 시스템</p>
         </div>
@@ -139,7 +139,7 @@ const LoginPage = () => {
         <div className="mt-7 border-t border-slate-100 pt-6 text-center">
           <p className="text-xs text-slate-500">
             아직 계정이 없으신가요?
-            <Link to="/register" className="ml-2 font-semibold text-blue-600 hover:text-blue-700 hover:underline">
+            <Link to="/signup" className="ml-2 font-semibold text-blue-600 hover:text-blue-700 hover:underline">
               회원 신청하기
             </Link>
           </p>
