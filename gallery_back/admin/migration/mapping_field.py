@@ -5,7 +5,7 @@ FIELD_MAPPING = {
     "addr2": "addr2",
     "eventstartdate": "startdate",
     "eventenddate": "enddate",
-    "firstimage2": "thumbnail",
+    "firstimage": "thumbnail",
     "mapx": "mapx",
     "mapy": "mapy",
     "tel": "tel",
