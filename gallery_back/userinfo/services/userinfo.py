@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from db.models.userinfo import UserInfo
 from userinfo.schemas.userinfo import UserInfoCreate
 from core.security import hash_password, verify_password
-from userinfo.exceptions.userinfo import UserAlreadyExistsException
+from userinfo.exceptions.userinfo import UserAlreadyExistsException, UserNotFoundException
 
 
 # 회원가입
@@ -58,4 +58,13 @@ def authenticate_user(
         return None
 
     # 4. 인증 성공 시 회원 정보 반환
+    return user
+
+
+# 현재 로그인 된 사용자를 반환
+def get_user(db: Session, user_id:int) -> UserInfo :
+    user =db.get(UserInfo, user_id)
+    if user is None :
+        raise UserNotFoundException
+
     return user
