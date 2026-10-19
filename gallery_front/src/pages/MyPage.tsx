@@ -6,12 +6,9 @@ const MyPage = () => {
       <div className="mx-auto max-w-5xl px-6 py-8">
         {/* 상단 헤더 */}
         <header className="flex items-center justify-between border-b border-gray-200 pb-5">
-          <Link to="/" className="text-sm font-bold tracking-[0.25em] text-[#58654f]">
-            MY PAGE
-          </Link>
-
+          MY PAGE
           <Link to="/" className="text-sm text-gray-500 hover:text-[#58654f]">
-            ← HOME
+            HOME
           </Link>
         </header>
 
