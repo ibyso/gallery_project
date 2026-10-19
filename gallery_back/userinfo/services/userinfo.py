@@ -60,11 +60,12 @@ def authenticate_user(
     # 4. 인증 성공 시 회원 정보 반환
     return user
 
+# 사용자 ID로 회원 정보 조회
+def get_user(db: Session, user_id: int) -> UserInfo:
 
-# 현재 로그인 된 사용자를 반환
-def get_user(db: Session, user_id:int) -> UserInfo :
-    user =db.get(UserInfo, user_id)
-    if user is None :
+    user = db.get(UserInfo, int(user_id))
+
+    if user is None:
         raise UserNotFoundException
 
     return user
