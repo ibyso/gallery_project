@@ -54,3 +54,6 @@ class UserInfo(Base):
 
     # 댓글과 연동
     comments: Mapped[list["Comment"]] = relationship(back_populates="userInfo")
+
+    # 좋아요와 연동
+    likes: Mapped[list["Like"]] = relationship(back_populates="userInfo")
