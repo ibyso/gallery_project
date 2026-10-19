@@ -33,3 +33,4 @@ class Festival(Base):
     is_delete:Mapped[bool] = mapped_column(default=False, nullable=True)
 
     comments: Mapped[list["Comment"]] = relationship("Comment",back_populates="festivals")
+    likes: Mapped[list["Like"]] = relationship("Like",back_populates="festivals")
