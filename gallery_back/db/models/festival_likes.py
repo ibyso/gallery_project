@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from db.models.userinfo import UserInfo
-    from db.models.festival import Festival  # 실제 경로 확인 필요
+    from db.models.festival import Festival
 
 
 class FestivalLikes(Base):
