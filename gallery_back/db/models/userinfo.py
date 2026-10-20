@@ -23,6 +23,12 @@ class UserRole(str, Enum):
     Manager = "Manager"
     Member = "Member"
 
+# 회원가입 신청 상태
+class UserAllowed(str, Enum):
+    Approved = "Approved"
+    Pending = "Pending"
+    Rejected = "Rejected"
+
 
 class UserInfo(Base):
 
@@ -56,7 +62,8 @@ class UserInfo(Base):
     gender: Mapped[Gender] = mapped_column(SQLEnum(Gender, native_enum=False, length=10, create_constraint=True),nullable=False)
 
     # 승인여부(관리자)
-    allow: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
+    # allow: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
+    allow: Mapped[UserAllowed] = mapped_column(SQLEnum(UserAllowed, native_enum=False, length=20),default=UserAllowed.Pending,nullable=True)
 
     # 댓글과 연동
     comments: Mapped[list["Comment"]] = relationship("Comment",back_populates="userInfo")
