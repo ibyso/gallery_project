@@ -77,3 +77,9 @@ class UserInfoPasswordChange(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class UserInfoUpdate(BaseModel):
+    email: EmailStr | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=30)
+    password: Password | None = None
+    current_password: str | None = None

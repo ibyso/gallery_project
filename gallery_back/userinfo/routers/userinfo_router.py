@@ -1,11 +1,26 @@
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+
 from db.database import get_db
-from userinfo.schemas.userinfo import UserInfoCreate, UserInfoResponse
-from userinfo.services.userinfo import register_user
+from db.models.userinfo import UserInfo
+from core.dependencies import get_current_user
+
+from userinfo.schemas.userinfo import (
+    UserInfoCreate,
+    UserInfoResponse,
+    UserInfoLogin,
+    UserInfoUpdate,
+    Token,
+)
+
+from userinfo.services.userinfo import (
+    register_user,
+    authenticate_user,
+    update_user,
+)
+
 from userinfo.exceptions.userinfo import UserAlreadyExistsException
-from userinfo.schemas.userinfo import UserInfoLogin, Token
-from userinfo.services.userinfo import authenticate_user
 from userinfo.utils.security import create_access_token
 
 
@@ -35,6 +50,7 @@ def signup(
             status_code=status.HTTP_409_CONFLICT,
             detail="이미 가입된 이메일입니다."
         )
+
 
 # 로그인 API
 @userinfo_router.post(
@@ -70,3 +86,47 @@ def signin(
         access_token=access_token,
         token_type="bearer"
     )
+
+
+# 회원정보 변경 API
+@userinfo_router.patch(
+    "/me",
+    response_model=UserInfoResponse
+)
+def change_my_info(
+    data: UserInfoUpdate,
+    db: Session = Depends(get_db),
+    current_user: UserInfo = Depends(get_current_user)
+):
+    try:
+        # 로그인한 사용자의 회원정보 수정
+        updated_user = update_user(
+            db=db,
+            user_id=current_user.user_id,
+            data=data
+        )
+
+        return updated_user
+
+    except UserAlreadyExistsException:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="이미 사용 중인 이메일입니다."
+        )
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+
+# 현재 로그인한 회원정보 조회 API
+@userinfo_router.get(
+    "/me",
+    response_model=UserInfoResponse
+)
+def get_my_info(
+    current_user: UserInfo = Depends(get_current_user)
+):
+    return current_user
