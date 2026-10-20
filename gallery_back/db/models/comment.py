@@ -2,6 +2,11 @@ from db.database import Base
 from sqlalchemy import Identity, DateTime, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from db.models.userinfo import UserInfo
+    from db.models.festival import Festival
 
 
 class Comment(Base):

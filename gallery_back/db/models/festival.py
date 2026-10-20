@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .comment import Comment
+    from .festival_likes import FestivalLikes
 
 class Festival(Base):
 
@@ -33,4 +34,4 @@ class Festival(Base):
     is_delete:Mapped[bool] = mapped_column(default=False, nullable=True)
 
     comments: Mapped[list["Comment"]] = relationship("Comment",back_populates="festivals")
-    likes: Mapped[list["Like"]] = relationship("Like",back_populates="festivals")
+    likes: Mapped[list["FestivalLikes"]] = relationship("FestivalLikes",back_populates="festivals")

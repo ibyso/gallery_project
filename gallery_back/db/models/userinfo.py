@@ -3,6 +3,12 @@ from sqlalchemy import Identity, DateTime, String, Integer, Enum as SQLEnum, Boo
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from enum import Enum
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from .comment import Comment
+    from .festival_likes import FestivalLikes
 
 
 # 성별
@@ -53,7 +59,7 @@ class UserInfo(Base):
     allow: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
 
     # 댓글과 연동
-    comments: Mapped[list["Comment"]] = relationship(back_populates="userInfo")
+    comments: Mapped[list["Comment"]] = relationship("Comment",back_populates="userInfo")
 
     # 좋아요와 연동
-    likes: Mapped[list["Like"]] = relationship(back_populates="userInfo")
+    likes: Mapped[list["FestivalLikes"]] = relationship("FestivalLikes",back_populates="userInfo")
