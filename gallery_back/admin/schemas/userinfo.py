@@ -49,6 +49,8 @@ class UserInfoResponse(BaseModel):
     user_id: int
     email: EmailStr
     name: str
+    role : str
+    allow :str
 
 # 로그인 요청 데이터
 class UserInfoLogin(BaseModel):

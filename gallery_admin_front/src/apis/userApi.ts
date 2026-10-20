@@ -6,10 +6,7 @@ const SERVER_URL = "http://localhost:8000/admin";
 
 // 회원가입
 export const signup = async (data: UserSignUp) => {
-  console.log("Signup init : ", `${SERVER_URL}/signup`);
-  console.log(data);
   const response = await axios.post(`${SERVER_URL}/signup`, data);
-  console.log(response);
   return response.data;
 };
 
