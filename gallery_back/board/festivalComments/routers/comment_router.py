@@ -1,7 +1,12 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from ..schemas.comment_schemas import CommentCreate, CommentUpdate
-from ..services.comment_services import comment_create, update_comment, delete_comment, get_comments_by_content_id
+from ..services.comment_services import (
+    comment_create,
+    update_comment,
+    delete_comment_service,
+    get_comments_by_content_id,
+)
 from db.database import get_db
 from ..exceptions.comment_exception import CommentNotFoundException
 
@@ -38,8 +43,8 @@ async def put_comment(comment_id: int, data: CommentUpdate, db: Session = Depend
 @comment_router.delete("/{comment_id}", response_model=dict)
 async def delete_comment(comment_id: int, db: Session = Depends(get_db)):
     try:
-        delete_comment(comment_id=comment_id, db=db)
+        delete_comment_service(comment_id=comment_id, db=db)
     except CommentNotFoundException:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="삭제할 댓글이 없습니다.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="삭제할 댓글이 없습니다.")
 
     return {"message": f"comment {comment_id} 번 삭제 성공"}

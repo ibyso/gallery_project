@@ -50,7 +50,7 @@ def update_comment(comment_id: int, data: CommentUpdate, db: Session):
 
 
 # 댓글 삭제
-def delete_comment(comment_id: int, db: Session):
+def delete_comment_service(comment_id: int, db: Session):
     comment = db.get(Comment, comment_id)
 
     if comment is None:

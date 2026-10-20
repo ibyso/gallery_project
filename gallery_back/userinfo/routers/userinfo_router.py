@@ -7,6 +7,8 @@ from userinfo.exceptions.userinfo import UserAlreadyExistsException
 from userinfo.schemas.userinfo import UserInfoLogin, Token
 from userinfo.services.userinfo import authenticate_user
 from userinfo.utils.security import create_access_token
+from db.models.userinfo import UserInfo
+from core.dependencies import get_current_user
 
 
 # 회원 관련 API Router
@@ -14,6 +16,10 @@ userinfo_router = APIRouter(
     prefix="/users",
     tags=["Users"]
 )
+
+@userinfo_router.get("/me", response_model=UserInfoResponse)
+async def read_me(current_user: UserInfo = Depends(get_current_user)) -> UserInfoResponse:
+    return current_user
 
 
 # 회원가입 API
