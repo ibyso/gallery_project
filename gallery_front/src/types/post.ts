@@ -1,14 +1,15 @@
 import type { CommentResponse } from "./festivalComment";
 import type { UserResponse } from "./user";
 
-export interface Post {
+export type Post = {
   id: number;
   title: string;
   image: string;
   startdate?: string | null;
   enddate?: string | null;
+  program?: string | null;
   comments: string[];
-}
+};
 
 export type FestivalResponse = {
   id: number;
@@ -26,4 +27,5 @@ export type FestivalListItem = {
   thumbnail: string | null;
   startdate: string | null;
   enddate: string | null;
+  program: string | null;
 };

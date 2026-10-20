@@ -54,6 +54,7 @@ export function useFestivals() {
           image: festival.thumbnail!,
           startdate: festival.startdate,
           enddate: festival.enddate,
+          program: festival.program,
           comments: [],
         }));
 
