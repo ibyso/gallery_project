@@ -1,3 +1,7 @@
+import axiosInstance from "./axios";
+
+const SERVER_URL = "http://localhost:8000/users";
+
 export interface UserSignupRequest {
   email: string;
   name: string;
@@ -14,7 +18,9 @@ export interface UserSignupResponse {
   gender: "Male" | "Female";
 }
 
-export const signup = async (data: UserSignupRequest): Promise<UserSignupResponse> => {
+export const signup = async (
+  data: UserSignupRequest,
+): Promise<UserSignupResponse> => {
   const response = await fetch("http://127.0.0.1:8000/users/signup", {
     method: "POST",
     headers: {
@@ -43,7 +49,9 @@ export interface UserLoginResponse {
 }
 
 // 로그인 API
-export const signin = async (data: UserLoginRequest): Promise<UserLoginResponse> => {
+export const signin = async (
+  data: UserLoginRequest,
+): Promise<UserLoginResponse> => {
   const response = await fetch("http://127.0.0.1:8000/users/signin", {
     method: "POST",
     headers: {
@@ -57,4 +65,9 @@ export const signin = async (data: UserLoginRequest): Promise<UserLoginResponse>
   }
 
   return response.json();
+};
+
+export const getCurrentUser = async () => {
+  const response = await axiosInstance.get(`${SERVER_URL}/me`);
+  return response.data;
 };

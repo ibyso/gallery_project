@@ -3,12 +3,11 @@ import PostGrid from "./components/PostGrid";
 import Pagination from "./components/Pagination";
 import PostModal from "./components/PostModal";
 import { usePosts } from "./hooks/usePosts";
+import { useAuth } from "./common/AuthContext";
 
-interface AppProps {
-  currentUserId?: string | number | null;
-}
+function App() {
+  const { currentUserId } = useAuth();
 
-function App({ currentUserId = null }: AppProps) {
   const {
     search,
     setSearch,
@@ -18,6 +17,8 @@ function App({ currentUserId = null }: AppProps) {
     currentPosts,
     setSelectedId,
     selectedPost,
+    comments,
+    commentsLoading,
     comment,
     setComment,
     addComment,
@@ -60,6 +61,8 @@ function App({ currentUserId = null }: AppProps) {
         <PostModal
           key={`${selectedPost.id}:${currentUserId}`}
           selectedPost={selectedPost}
+          comments={comments}
+          commentsLoading={commentsLoading}
           comment={comment}
           setComment={setComment}
           addComment={addComment}

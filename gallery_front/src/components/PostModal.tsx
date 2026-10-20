@@ -1,20 +1,25 @@
 import { useState } from "react";
+import type { CommentResponse } from "../types/festivalComment";
 import type { Post } from "../types/post";
 
 interface PostModalProps {
   selectedPost: Post;
+  comments: CommentResponse[];
+  commentsLoading: boolean;
   comment: string;
   setComment: (value: string) => void;
-  addComment: () => void;
-  updateComment: (commentIndex: number, updatedComment: string) => void;
-  removeComment: (commentIndex: number) => boolean;
+  addComment: () => Promise<void>;
+  updateComment: (commentId: number, updatedComment: string) => Promise<boolean>;
+  removeComment: (commentId: number) => Promise<boolean>;
   isLoggedIn: boolean;
-  canEditComment: (commentIndex: number) => boolean;
+  canEditComment: (commentId: number) => boolean;
   closeModal: () => void;
 }
 
 function PostModal({
   selectedPost,
+  comments,
+  commentsLoading,
   comment,
   setComment,
   addComment,
@@ -25,28 +30,29 @@ function PostModal({
   closeModal,
 }: PostModalProps) {
   // 어떤 댓글을 수정하고 있는지와 수정 입력값을 따로 보관
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [editingComment, setEditingComment] = useState("");
 
-  const startEdit = (index: number, text: string) => {
-    if (!canEditComment(index)) return;
-    setEditingIndex(index);
+  const startEdit = (commentId: number, text: string) => {
+    if (!canEditComment(commentId)) return;
+    setEditingId(commentId);
     setEditingComment(text);
   };
 
   const cancelEdit = () => {
-    setEditingIndex(null);
+    setEditingId(null);
     setEditingComment("");
   };
 
-  const saveEdit = () => {
-    if (editingIndex === null || !canEditComment(editingIndex)) return;
+  const saveEdit = async () => {
+    if (editingId === null || !canEditComment(editingId)) return;
 
     const trimmedText = editingComment.trim();
     if (!trimmedText) return;
 
-    updateComment(editingIndex, trimmedText);
-    cancelEdit();
+    if (await updateComment(editingId, trimmedText)) {
+      cancelEdit();
+    }
   };
 
   return (
@@ -76,7 +82,7 @@ function PostModal({
             <div>
               <h3 className="font-semibold">{selectedPost.title}</h3>
               <p className="mt-2 text-xs text-gray-400">
-                댓글 {selectedPost.comments.length}
+                {commentsLoading ? "댓글 불러오는 중…" : `댓글 ${comments.length}`}
               </p>
             </div>
 
@@ -91,29 +97,35 @@ function PostModal({
 
           {/* 댓글 목록 */}
           <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5">
-            {selectedPost.comments.map((text, index) => (
-              <div key={index} className="flex gap-3">
+            {commentsLoading && <p role="status" className="text-sm text-gray-500">댓글을 불러오는 중입니다.</p>}
+            {!commentsLoading && comments.length === 0 && (
+              <p className="text-sm text-gray-500">첫 댓글을 남겨보세요.</p>
+            )}
+            {comments.map((item) => (
+              <div key={item.comment_id} className="flex gap-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#edf0e9] text-xs">
                   익
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs font-semibold">익명</p>
-                    {editingIndex !== index && canEditComment(index) && (
+                    <p className="text-xs font-semibold">{item.user?.name ?? "익명"}</p>
+                    {editingId !== item.comment_id && canEditComment(item.comment_id) && (
                       <div className="flex gap-3">
                       <button
                         type="button"
-                        onClick={() => startEdit(index, text)}
+                        onClick={() => startEdit(item.comment_id, item.body)}
+                        disabled={commentsLoading}
                         className="cursor-pointer text-xs text-gray-500 hover:text-[#58654f]"
                       >
                         수정
                       </button>
                       <button
                         type="button"
-                        onClick={() => {
-                          if (removeComment(index)) cancelEdit();
+                        onClick={async () => {
+                          if (await removeComment(item.comment_id)) cancelEdit();
                         }}
+                        disabled={commentsLoading}
                         className="cursor-pointer text-xs text-red-500 hover:text-red-700"
                       >
                         삭제
@@ -122,7 +134,7 @@ function PostModal({
                     )}
                   </div>
 
-                  {editingIndex === index && canEditComment(index) ? (
+                  {editingId === item.comment_id && canEditComment(item.comment_id) ? (
                     <div className="mt-2">
                       <textarea
                         aria-label="댓글 수정 내용"
@@ -147,8 +159,8 @@ function PostModal({
                             type="button"
                             onClick={saveEdit}
                             disabled={
-                              !editingComment.trim() ||
-                              editingComment.trim() === text
+                              commentsLoading || !editingComment.trim() ||
+                              editingComment.trim() === item.body
                             }
                             className="cursor-pointer rounded bg-[#58654f] px-3 py-2 text-xs text-white disabled:cursor-not-allowed disabled:opacity-40"
                           >
@@ -159,7 +171,7 @@ function PostModal({
                     </div>
                   ) : (
                     <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-relaxed">
-                      {text}
+                      {item.body}
                     </p>
                   )}
                 </div>
@@ -189,7 +201,7 @@ function PostModal({
               <button
                 type="button"
                 onClick={addComment}
-                disabled={!comment.trim() || !isLoggedIn}
+                disabled={!comment.trim() || !isLoggedIn || commentsLoading}
                 className="cursor-pointer rounded bg-[#58654f] px-4 py-2 text-xs text-white disabled:cursor-not-allowed disabled:opacity-40"
               >
                 댓글 남기기

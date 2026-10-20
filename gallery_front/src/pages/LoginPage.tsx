@@ -3,11 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import type { ChangeEvent, SubmitEvent } from "react";
 import { signin } from "../apis/userApi";
 import { useAuth } from "../common/AuthContext";
-
-interface UserLogin {
-  email: string;
-  password: string;
-}
+import type { UserLogin } from "../types/user";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -95,7 +91,10 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium">
+            <label
+              htmlFor="password"
+              className="mb-1 block text-sm font-medium"
+            >
               비밀번호
             </label>
 
@@ -111,7 +110,9 @@ const LoginPage = () => {
             />
           </div>
           {/* 로그인 오류 메시지 */}
-          {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-sm text-red-500">{errorMessage}</p>
+          )}
           <button
             type="submit"
             className="w-full cursor-pointer rounded-lg bg-[#58654f] py-3 font-semibold text-white hover:bg-[#45513e]"
@@ -122,7 +123,10 @@ const LoginPage = () => {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           계정이 없으신가요?{" "}
-          <Link to="/users/signup" className="font-medium text-[#58654f] hover:underline">
+          <Link
+            to="/users/signup"
+            className="font-medium text-[#58654f] hover:underline"
+          >
             회원가입
           </Link>
         </p>

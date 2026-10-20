@@ -1,124 +1,89 @@
-import { useEffect } from "react";
-import type { Dispatch, SetStateAction } from "react";
-import { getComments } from "../apis/commentApi";
-import type { GalleryPost } from "./useFestivals";
+import { deleteComment, postComment, putComment } from "../apis/commentApi";
+import type { CommentResponse } from "../types/festivalComment";
 
-export function useComments(
-  selectedId: number | null,
-  selectedPost: GalleryPost | undefined,
+export const useComments = (
+  contentId: number | null,
+  comments: CommentResponse[],
   currentUserId: number | string | null,
   comment: string,
-  setComment: Dispatch<SetStateAction<string>>,
-  setPosts: Dispatch<SetStateAction<GalleryPost[]>>,
-) {
-  // 모달을 열면 선택한 게시물의 DB 댓글을 조회
-  useEffect(() => {
-    if (selectedId === null) return;
-
-    let ignore = false;
-    const contentId = selectedId;
-
-    const loadComments = async () => {
-      try {
-        const comments = await getComments(contentId);
-
-        if (ignore) return;
-
-        setPosts((previous) =>
-          previous.map((post) => {
-            if (post.id !== contentId) return post;
-
-            return {
-              ...post,
-              comments: comments.map((comment) => comment.body),
-              commentOwners: comments.map((comment) => String(comment.user_id)),
-            };
-          }),
-        );
-      } catch (error) {
-        if (!ignore) {
-          console.error("댓글 조회 실패:", error);
-        }
-      }
-    };
-
-    void loadComments();
-
-    return () => {
-      ignore = true;
-    };
-  }, [selectedId, setPosts]);
-
+  setComment: (value: string) => void,
+  refresh: () => void,
+) => {
   const isLoggedIn = currentUserId !== null;
 
-  const canEditComment = (index: number) =>
-    isLoggedIn &&
-    selectedPost?.commentOwners?.[index] === String(currentUserId);
+  // 본인이 작성한 댓글인지 확인
+  const canEditComment = (commentId: number) => {
+    const target = comments.find((item) => item.comment_id === commentId);
+    if (!isLoggedIn || !target) return false;
 
-  const addComment = () => {
+    const authorId = target.user_id ?? target.user?.user_id;
+    return String(authorId) === String(currentUserId);
+  };
+
+  // 댓글 작성
+  const addComment = async () => {
     const body = comment.trim();
-    if (!selectedPost || !isLoggedIn || !body || body.length > 500) return;
+    if (
+      contentId === null ||
+      currentUserId === null ||
+      !body ||
+      body.length > 500
+    )
+      return;
 
-    setPosts((previous) =>
-      previous.map((post) =>
-        post.id === selectedId
-          ? {
-              ...post,
-              comments: [...post.comments, body],
-              commentOwners: [
-                ...(post.commentOwners ?? post.comments.map(() => null)),
-                String(currentUserId),
-              ],
-            }
-          : post,
-      ),
-    );
-    setComment("");
+    try {
+      await postComment({
+        content_id: contentId,
+        user_id: Number(currentUserId),
+        body,
+      });
+      setComment("");
+      await refresh();
+    } catch (error) {
+      console.error("댓글 작성 실패:", error);
+      window.alert("댓글을 작성하지 못했습니다.");
+    }
   };
 
-  const updateComment = (index: number, value: string) => {
+  // 댓글 수정
+  const updateComment = async (commentId: number, value: string) => {
     const body = value.trim();
-    if (!canEditComment(index) || !body || body.length > 500) return;
+    if (!canEditComment(commentId) || !body || body.length > 500) {
+      return false;
+    }
 
-    setPosts((previous) =>
-      previous.map((post) =>
-        post.id === selectedId
-          ? {
-              ...post,
-              comments: post.comments.map((text, i) =>
-                i === index ? body : text,
-              ),
-            }
-          : post,
-      ),
-    );
+    try {
+      await putComment(commentId, { body });
+      await refresh();
+      return true;
+    } catch (error) {
+      console.error("댓글 수정 실패:", error);
+      window.alert("댓글을 수정하지 못했습니다.");
+      return false;
+    }
   };
 
-  const removeComment = (index: number) => {
-    if (!canEditComment(index) || !window.confirm("댓글을 삭제하시겠습니까?"))
-      return false;
+  // 댓글 삭제
+  const removeComment = async (commentId: number) => {
+    if (!canEditComment(commentId)) return false;
+    if (!window.confirm("댓글을 삭제하시겠습니까?")) return false;
 
-    setPosts((previous) =>
-      previous.map((post) =>
-        post.id === selectedId
-          ? {
-              ...post,
-              comments: post.comments.filter((_, i) => i !== index),
-              commentOwners: post.commentOwners?.filter((_, i) => i !== index),
-            }
-          : post,
-      ),
-    );
-    return true;
+    try {
+      await deleteComment(commentId);
+      await refresh();
+      return true;
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+      window.alert("댓글을 삭제하지 못했습니다.");
+      return false;
+    }
   };
 
   return {
-    comment,
-    setComment,
     isLoggedIn,
     canEditComment,
     addComment,
     updateComment,
     removeComment,
   };
-}
+};
