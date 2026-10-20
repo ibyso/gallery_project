@@ -25,10 +25,13 @@ def get_comments_by_content_id(content_id: int, db: Session):
         {
             "comment_id": comment.comment_id,
             "content_id": comment.content_id,
-            "user_id": comment.user_id,
             "body": comment.body,
             "created_at": comment.created_at,
             "updated_at": comment.updated_at,
+            "user": {
+                "user_id": comment.userInfo.user_id,
+                "name": comment.userInfo.name,
+                },
         }
         for comment in comments
     ]

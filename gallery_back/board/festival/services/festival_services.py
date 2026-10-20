@@ -15,6 +15,7 @@ def get_festivals(db: Session) -> list[dict]:
             "thumbnail": festival.thumbnail,
             "startdate": festival.startdate,
             "enddate": festival.enddate,
+            "program": festival.program,
         }
         for festival in festivals
     ]

@@ -9,7 +9,10 @@ interface PostModalProps {
   comment: string;
   setComment: (value: string) => void;
   addComment: () => Promise<void>;
-  updateComment: (commentId: number, updatedComment: string) => Promise<boolean>;
+  updateComment: (
+    commentId: number,
+    updatedComment: string,
+  ) => Promise<boolean>;
   removeComment: (commentId: number) => Promise<boolean>;
   isLoggedIn: boolean;
   canEditComment: (commentId: number) => boolean;
@@ -76,13 +79,15 @@ function PostModal({
           />
         </div>
 
-        {/* 댓글 패널 */}
+        {/* 축제 상세 정보와 댓글 패널 */}
         <div className="flex h-72 w-full shrink-0 flex-col md:h-full md:w-80">
           <div className="flex items-center justify-between border-b p-5">
             <div>
               <h3 className="font-semibold">{selectedPost.title}</h3>
               <p className="mt-2 text-xs text-gray-400">
-                {commentsLoading ? "댓글 불러오는 중…" : `댓글 ${comments.length}`}
+                {commentsLoading
+                  ? "댓글 불러오는 중…"
+                  : `댓글 ${comments.length}`}
               </p>
             </div>
 
@@ -95,46 +100,74 @@ function PostModal({
             </button>
           </div>
 
-          {/* 댓글 목록 */}
+          {/* 축제 상세 정보와 댓글 목록 */}
           <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5">
-            {commentsLoading && <p role="status" className="text-sm text-gray-500">댓글을 불러오는 중입니다.</p>}
+            <details className="group border-b border-gray-200 pb-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+                축제 상세 정보
+                <span
+                  aria-hidden="true"
+                  className="transition-transform group-open:rotate-180"
+                >
+                  ▼
+                </span>
+              </summary>
+              <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-6 text-gray-600">
+                {selectedPost.program?.trim()
+                  ? selectedPost.program.replace(/<br\s*\/?>/gi, "\n")
+                  : "등록된 프로그램 정보가 없습니다."}
+              </p>
+            </details>
+
+            {commentsLoading && (
+              <p role="status" className="text-sm text-gray-500">
+                댓글을 불러오는 중입니다.
+              </p>
+            )}
             {!commentsLoading && comments.length === 0 && (
               <p className="text-sm text-gray-500">첫 댓글을 남겨보세요.</p>
             )}
             {comments.map((item) => (
               <div key={item.comment_id} className="flex gap-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#edf0e9] text-xs">
-                  익
+                  {item.user?.name.charAt(0)}
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs font-semibold">{item.user?.name ?? "익명"}</p>
-                    {editingId !== item.comment_id && canEditComment(item.comment_id) && (
-                      <div className="flex gap-3">
-                      <button
-                        type="button"
-                        onClick={() => startEdit(item.comment_id, item.body)}
-                        disabled={commentsLoading}
-                        className="cursor-pointer text-xs text-gray-500 hover:text-[#58654f]"
-                      >
-                        수정
-                      </button>
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          if (await removeComment(item.comment_id)) cancelEdit();
-                        }}
-                        disabled={commentsLoading}
-                        className="cursor-pointer text-xs text-red-500 hover:text-red-700"
-                      >
-                        삭제
-                      </button>
-                      </div>
-                    )}
+                    <p className="text-xs font-semibold">
+                      {item.user?.name ?? "익명"}
+                    </p>
+                    {editingId !== item.comment_id &&
+                      canEditComment(item.comment_id) && (
+                        <div className="flex gap-3">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              startEdit(item.comment_id, item.body)
+                            }
+                            disabled={commentsLoading}
+                            className="cursor-pointer text-xs text-gray-500 hover:text-[#58654f]"
+                          >
+                            수정
+                          </button>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              if (await removeComment(item.comment_id))
+                                cancelEdit();
+                            }}
+                            disabled={commentsLoading}
+                            className="cursor-pointer text-xs text-red-500 hover:text-red-700"
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      )}
                   </div>
 
-                  {editingId === item.comment_id && canEditComment(item.comment_id) ? (
+                  {editingId === item.comment_id &&
+                  canEditComment(item.comment_id) ? (
                     <div className="mt-2">
                       <textarea
                         aria-label="댓글 수정 내용"
@@ -159,7 +192,8 @@ function PostModal({
                             type="button"
                             onClick={saveEdit}
                             disabled={
-                              commentsLoading || !editingComment.trim() ||
+                              commentsLoading ||
+                              !editingComment.trim() ||
                               editingComment.trim() === item.body
                             }
                             className="cursor-pointer rounded bg-[#58654f] px-3 py-2 text-xs text-white disabled:cursor-not-allowed disabled:opacity-40"
