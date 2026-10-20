@@ -8,9 +8,9 @@ if TYPE_CHECKING:
     from db.models.festival import Festival  # 실제 경로 확인 필요
 
 
-class Like(Base):
+class FestivalLikes(Base):
 
-    __tablename__ = "like"
+    __tablename__ = "festival_likes"
 
     # 좋아요 PK
     like_id: Mapped[int] = mapped_column(

@@ -5,7 +5,7 @@ from admin.routers.migration_router import migration_router
 from admin.routers.userinfo_router import admin_user_router
 from userinfo.routers.userinfo_router import userinfo_router  # 추가
 from board.festival.routers.festival_router import festival_router
-from db.models.like import Like
+from gallery_project.gallery_back.db.models.festival_likes import Like
 
 app = FastAPI(title="Galley Project API", version="0.1.0")
 
