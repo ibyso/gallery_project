@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import useCurrentUser from "../hooks/useCurrentUser";
 import { AuthContext } from "./AuthContext";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -6,6 +7,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(() =>
     sessionStorage.getItem("access_token"),
   );
+  const { currentUserId } = useCurrentUser(accessToken);
 
   // 로그인 성공 시 실행
   const login = (token: string) => {
@@ -21,6 +23,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     isLoggedIn: accessToken !== null,
+    currentUserId,
     login,
     logout,
   };

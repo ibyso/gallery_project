@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
-export function usePostModal(onClose: () => void) {
+export function usePostModal(setComment: (value: string) => void) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const closeModal = () => {
     setSelectedId(null);
-    onClose();
+    setComment("");
   };
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export function usePostModal(onClose: () => void) {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setSelectedId(null);
-        onClose();
+        setComment("");
       }
     };
 
@@ -26,7 +26,7 @@ export function usePostModal(onClose: () => void) {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = previousOverflow;
     };
-  }, [selectedId, onClose]);
+  }, [selectedId, setComment]);
 
   return { selectedId, setSelectedId, closeModal };
 }

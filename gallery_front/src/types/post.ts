@@ -20,10 +20,10 @@ export type FestivalResponse = {
   comments: CommentResponse[];
 };
 
-export interface FestivalListItem {
+export type FestivalListItem = {
   id: number;
   title: string;
   thumbnail: string | null;
   startdate: string | null;
   enddate: string | null;
-}
+};

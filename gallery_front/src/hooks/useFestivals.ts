@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { getFestivals } from "../apis/festivalApi";
 import type { Post } from "../types/post";
 
-export type GalleryPost = Post & {
-  commentOwners?: (string | null)[];
-};
+export type FestivalPost = Post;
 
 export function useFestivals() {
-  const [posts, setPosts] = useState<GalleryPost[]>([]);
+  const [posts, setPosts] = useState<FestivalPost[]>([]);
 
   // 한국 날짜 기준으로 진행 중인 축제만 최근 시작한 순서로 표시
   useEffect(() => {
