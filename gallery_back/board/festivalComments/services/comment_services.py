@@ -3,6 +3,7 @@ from ..schemas.comment_schemas import CommentCreate, CommentUpdate
 from db.models.comment import Comment
 from ..exceptions.comment_exception import CommentNotFoundException
 from sqlalchemy import select
+from userinfo.exceptions.userinfo import UserCredentialsException
 
 
 # 댓글 작성
@@ -38,11 +39,14 @@ def get_comments_by_content_id(content_id: int, db: Session):
 
 
 # 댓글 수정
-def update_comment(comment_id: int, data: CommentUpdate, db: Session):
+def update_comment(comment_id: int, data: CommentUpdate, db: Session, current_user_id: int):
     comment = db.get(Comment, comment_id)
 
     if comment is None:
         raise CommentNotFoundException
+
+    if comment.user_id != current_user_id:
+        raise UserCredentialsException
 
     if data.body is not None:
         comment.body = data.body
@@ -53,11 +57,14 @@ def update_comment(comment_id: int, data: CommentUpdate, db: Session):
 
 
 # 댓글 삭제
-def delete_comment_service(comment_id: int, db: Session):
+def delete_comment_service(comment_id: int, db: Session, current_user_id: int):
     comment = db.get(Comment, comment_id)
 
     if comment is None:
         raise CommentNotFoundException
+
+    if comment.user_id != current_user_id:
+        raise UserCredentialsException
 
     db.delete(comment)
     db.commit()
