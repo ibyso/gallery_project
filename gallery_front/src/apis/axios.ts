@@ -23,7 +23,8 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (
       error.response?.status === 401 &&
-      error.config?.url !== "/users/signin"
+      error.config?.url !== "/users/signin" &&
+      error.config?.url !== "/users/signup"
     ) {
       sessionStorage.removeItem("access_token");
       location.href = "/users/signin";
