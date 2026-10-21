@@ -7,6 +7,7 @@ import SignupPage from "./pages/SignupPage";
 import AuthProvider from "./common/AuthProvider";
 import "./index.css";
 import MyPage from "./pages/MyPage";
+import InfoChange from "./pages/InfoChange";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/users/signin" element={<LoginPage />} />
           <Route path="/users/signup" element={<SignupPage />} />
           <Route path="/users/mypage" element={<MyPage />} />
+          <Route path="/users/infochange" element={<InfoChange />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

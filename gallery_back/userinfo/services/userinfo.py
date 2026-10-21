@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from db.models.userinfo import UserInfo
-from userinfo.schemas.userinfo import UserInfoCreate
+from userinfo.schemas.userinfo import UserInfoCreate, UserInfoUpdate
 from core.security import hash_password, verify_password
 from userinfo.exceptions.userinfo import UserAlreadyExistsException, UserNotFoundException
 
@@ -67,5 +67,53 @@ def get_user(db: Session, user_id: int) -> UserInfo:
 
     if user is None:
         raise UserNotFoundException
+
+    return user
+
+# 회원정보 변경
+def update_user(
+    db: Session,
+    user_id: int,
+    data: UserInfoUpdate
+) -> UserInfo:
+
+    # 1. 로그인한 사용자 조회
+    user = get_user(db, user_id)
+
+    # 2. 이메일 변경
+    if data.email is not None:
+
+        # 기존 이메일과 다른 경우에만 중복 검사
+        if data.email != user.email:
+            existing_user = db.scalar(
+                select(UserInfo).where(UserInfo.email == data.email)
+            )
+
+            if existing_user is not None:
+                raise UserAlreadyExistsException
+
+            user.email = data.email
+
+    # 3. 이름 변경
+    if data.name is not None:
+        user.name = data.name
+
+    # 4. 비밀번호 변경
+    if data.password is not None:
+
+        # 현재 비밀번호 입력 확인
+        if not data.current_password:
+            raise ValueError("현재 비밀번호를 입력해주세요.")
+
+        # 현재 비밀번호 일치 여부 확인
+        if not verify_password(data.current_password, user.password):
+            raise ValueError("현재 비밀번호가 올바르지 않습니다.")
+
+        # 새 비밀번호 해싱
+        user.password = hash_password(data.password)
+
+    # 5. 데이터베이스 저장
+    db.commit()
+    db.refresh(user)
 
     return user

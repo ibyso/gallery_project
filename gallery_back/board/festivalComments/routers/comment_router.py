@@ -9,12 +9,14 @@ from ..services.comment_services import (
 )
 from db.database import get_db
 from ..exceptions.comment_exception import CommentNotFoundException
+from db.models.userinfo import UserInfo
+from core.dependencies import get_current_user
 
 comment_router = APIRouter(tags=["Comments"])
 
 # 댓글 등록
 @comment_router.post("", response_model=dict)
-async def post_comment(data: CommentCreate, db: Session = Depends(get_db)):
+async def post_comment(data: CommentCreate, db: Session = Depends(get_db), current_user: UserInfo = Depends(get_current_user)):
     comment = comment_create(data=data, db=db)
 
     return {"message": f"comment {comment.comment_id} 번 등록 성공"}
@@ -30,7 +32,7 @@ async def get_comments(content_id: int, db:  Session = Depends(get_db)):
 
 # 댓글 수정
 @comment_router.put("/{comment_id}", response_model=dict)
-async def put_comment(comment_id: int, data: CommentUpdate, db: Session = Depends(get_db)):
+async def put_comment(comment_id: int, data: CommentUpdate, db: Session = Depends(get_db), current_user: UserInfo = Depends(get_current_user)):
     try:
         id = update_comment(comment_id=comment_id, data=data, db=db)
     except CommentNotFoundException:
@@ -41,7 +43,7 @@ async def put_comment(comment_id: int, data: CommentUpdate, db: Session = Depend
 
 # 댓글 삭제
 @comment_router.delete("/{comment_id}", response_model=dict)
-async def delete_comment(comment_id: int, db: Session = Depends(get_db)):
+async def delete_comment(comment_id: int, db: Session = Depends(get_db), current_user: UserInfo = Depends(get_current_user)):
     try:
         delete_comment_service(comment_id=comment_id, db=db)
     except CommentNotFoundException:

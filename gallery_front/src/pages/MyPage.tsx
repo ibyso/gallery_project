@@ -1,6 +1,33 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getMyInfo } from "../apis/userInfoGet";
 
 const MyPage = () => {
+  // 로그인한 사용자의 이름
+  const [nickname, setNickname] = useState("회원님");
+
+  // 회원정보 조회
+  useEffect(() => {
+    const fetchMyInfo = async () => {
+      const token = sessionStorage.getItem("access_token");
+
+      if (!token) {
+        return;
+      }
+
+      try {
+        const user = await getMyInfo(token);
+
+        // DB의 name을 닉네임으로 사용
+        setNickname(user.name);
+      } catch (error) {
+        console.error("회원정보 조회 실패:", error);
+      }
+    };
+
+    fetchMyInfo();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#fafaf8] text-[#292c28]">
       <div className="mx-auto max-w-5xl px-6 py-8">
@@ -28,18 +55,16 @@ const MyPage = () => {
           </div>
 
           <div className="flex-1">
-            <p className="text-lg font-semibold">내 프로필</p>
-            <p className="mt-1 text-sm text-gray-400">회원정보</p>
+            <p className="text-lg font-semibold">{nickname}</p>
+            <p className="mt-1 text-sm text-gray-400">내 프로필</p>
           </div>
 
-          <button
-            type="button"
-            disabled
-            title="추후 구현 예정"
-            className="cursor-not-allowed rounded-full border border-gray-200 bg-white px-5 py-3 text-sm text-gray-400"
+          <Link
+            to="/users/infochange"
+            className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm text-[#292c28] transition-colors hover:border-[#58654f] hover:text-[#58654f]"
           >
             회원정보 변경
-          </button>
+          </Link>
         </section>
 
         {/* 환영 메시지 */}

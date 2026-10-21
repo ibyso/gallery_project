@@ -1,103 +1,10 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import type { ChangeEvent, FormEvent } from "react";
-import { signup } from "../apis/userApi";
-
-interface UserSignup {
-  email: string;
-  name: string;
-  password: string;
-  passwordCheck: string;
-  age: string;
-  gender: "Male" | "Female" | "";
-}
-
-const validatePassword = (password: string): boolean => {
-  return (
-    password.length >= 8 &&
-    password.length <= 64 &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password) &&
-    /[@!$*-]/.test(password)
-  );
-};
+import { Link } from "react-router-dom";
+import { useSignup } from "../hooks/useSignup";
 
 const SignupPage = () => {
-  const navigate = useNavigate();
-  const [signupForm, setSignupForm] = useState<UserSignup>({
-    email: "",
-    name: "",
-    password: "",
-    passwordCheck: "",
-    age: "",
-    gender: "",
-  });
-
-  const [errorMessage, setErrorMessage] = useState("");
+  const { signupForm, errorMessage, handleChange, handleSubmit } = useSignup();
 
   const { email, name, password, passwordCheck, age, gender } = signupForm;
-
-  // 입력값 변경
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-
-    setSignupForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
-
-    setErrorMessage("");
-  };
-
-  // 회원가입 버튼 클릭
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!validatePassword(password)) {
-      setErrorMessage(
-        "비밀번호는 8~64자이며 대문자, 소문자, 숫자, 특수문자(@!$*-)를 포함해야 합니다.",
-      );
-      return;
-    }
-
-    // 비밀번호 일치 확인
-    if (password !== passwordCheck) {
-      setErrorMessage("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    // 성별 선택 확인
-    if (gender !== "Male" && gender !== "Female") {
-      setErrorMessage("성별을 선택해주세요.");
-      return;
-    }
-
-    setErrorMessage("");
-
-    try {
-      // FastAPI 회원가입 요청
-      const result = await signup({
-        email,
-        name,
-        password,
-        age: Number(age),
-        gender,
-      });
-
-      console.log("회원가입 성공:", result);
-      alert("회원가입이 완료되었습니다.");
-      navigate("/users/signin");
-    } catch (error) {
-      console.error("회원가입 오류:", error);
-
-      if (error instanceof Error && error.message.includes("409")) {
-        setErrorMessage("이미 가입된 이메일입니다.");
-      } else {
-        setErrorMessage("회원가입에 실패했습니다. 입력값을 확인해주세요.");
-      }
-    }
-  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#fafaf8] px-4 py-10">
