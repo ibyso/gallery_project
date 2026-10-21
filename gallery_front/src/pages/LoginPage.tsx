@@ -1,63 +1,10 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import type { ChangeEvent, SubmitEvent } from "react";
-import { signin } from "../apis/userApi";
-import { useAuth } from "../common/AuthContext";
-import type { UserLogin } from "../types/user";
+import { Link } from "react-router-dom";
+import { useLogin } from "../hooks/useLogin";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const [loginForm, setLoginForm] = useState<UserLogin>({
-    email: "",
-    password: "",
-  });
-
-  const [errorMessage, setErrorMessage] = useState("");
+  const { loginForm, errorMessage, handleChange, handleSubmit } = useLogin();
 
   const { email, password } = loginForm;
-
-  // 이메일, 비밀번호 입력값 변경
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setLoginForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
-
-    setErrorMessage("");
-  };
-
-  // 로그인 버튼 클릭
-  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setErrorMessage("");
-
-    console.log("로그인 버튼 클릭 확인");
-
-    try {
-      const result = await signin({ email, password });
-
-      // JWT 토큰 저장 및 로그인 상태 변경
-      login(result.access_token);
-
-      console.log("로그인 성공:", result.token_type);
-      alert("로그인에 성공했습니다.");
-
-      // 로그인 성공 후 메인 페이지로 이동
-      navigate("/");
-    } catch (error) {
-      console.error("로그인 오류:", error);
-
-      if (error instanceof Error && error.message.includes("401")) {
-        setErrorMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
-      } else {
-        setErrorMessage("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
-      }
-    }
-  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#fafaf8] px-4">
@@ -91,10 +38,7 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="mb-1 block text-sm font-medium"
-            >
+            <label htmlFor="password" className="mb-1 block text-sm font-medium">
               비밀번호
             </label>
 
@@ -110,9 +54,7 @@ const LoginPage = () => {
             />
           </div>
           {/* 로그인 오류 메시지 */}
-          {errorMessage && (
-            <p className="text-sm text-red-500">{errorMessage}</p>
-          )}
+          {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
           <button
             type="submit"
             className="w-full cursor-pointer rounded-lg bg-[#58654f] py-3 font-semibold text-white hover:bg-[#45513e]"
@@ -123,10 +65,7 @@ const LoginPage = () => {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           계정이 없으신가요?{" "}
-          <Link
-            to="/users/signup"
-            className="font-medium text-[#58654f] hover:underline"
-          >
+          <Link to="/users/signup" className="font-medium text-[#58654f] hover:underline">
             회원가입
           </Link>
         </p>
