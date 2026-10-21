@@ -6,6 +6,7 @@ from admin.routers.userinfo_router import admin_user_router
 from userinfo.routers.userinfo_router import userinfo_router
 from board.festival.routers.festival_router import festival_router
 from db.models.festival_likes import FestivalLikes
+from board.festivalLikes.routers.like_router import like_router
 
 app = FastAPI(title="Galley Project API", version="0.1.0")
 
@@ -17,8 +18,9 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(comment_router, prefix="/comments")
-app.include_router(migration_router, prefix="/migration")
 app.include_router(userinfo_router)
 app.include_router(festival_router, prefix="/festivals")
+app.include_router(comment_router, prefix="/comments")
+app.include_router(like_router, prefix="/likes")
 app.include_router(admin_user_router, prefix="/admin")
+app.include_router(migration_router, prefix="/migration")
