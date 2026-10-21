@@ -1,74 +1,20 @@
-import { useState } from "react";
+import { useInfoChange } from "../hooks/useInfoChange";
 import { Link } from "react-router-dom";
-import { updateUser } from "../apis/userInfoChange";
 
 const InfoChange = () => {
-  const [originalEmail] = useState("");
-  const [originalName] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // 새 비밀번호 일치 확인
-    if (newPassword !== confirmPassword) {
-      alert("새 비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    // 현재 비밀번호 확인
-    if (newPassword && !currentPassword) {
-      alert("현재 비밀번호를 입력해주세요.");
-      return;
-    }
-
-    // 변경할 데이터 구성
-    const updateData = {
-      email: email.trim() !== "" && email.trim() !== originalEmail ? email.trim() : null,
-      name: name.trim() !== "" && name.trim() !== originalName ? name.trim() : null,
-      password: newPassword !== "" ? newPassword : null,
-      current_password: newPassword !== "" ? currentPassword : null,
-    };
-
-    // 변경할 내용이 없는 경우
-    if (updateData.email === null && updateData.name === null && updateData.password === null) {
-      alert("변경할 정보를 입력해주세요.");
-      return;
-    }
-
-    // 로그인 토큰 가져오기
-    const token = sessionStorage.getItem("access_token");
-
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
-
-    // FastAPI에 회원정보 변경 요청
-    try {
-      const result = await updateUser(updateData, token);
-
-      console.log("회원정보 변경 성공:", result);
-      alert("회원정보가 성공적으로 변경되었습니다.");
-
-      // 입력값 초기화
-      setEmail("");
-      setName("");
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert("회원정보 변경 중 오류가 발생했습니다.");
-      }
-    }
-  };
+  const {
+    email,
+    setEmail,
+    name,
+    setName,
+    currentPassword,
+    setCurrentPassword,
+    newPassword,
+    setNewPassword,
+    confirmPassword,
+    setConfirmPassword,
+    handleSubmit,
+  } = useInfoChange();
 
   return (
     <div className="min-h-screen bg-[#fafaf8] text-[#292c28]">
