@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signup } from "../apis/userApi";
 import type { UserSignup } from "../types/user";
 import { validatePassword } from "../utils/validatePassword";
+import axios from "axios";
 
 export const useSignup = () => {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export const useSignup = () => {
     } catch (error) {
       console.error("회원가입 오류:", error);
 
-      if (error instanceof Error && error.message.includes("409")) {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
         setErrorMessage("이미 가입된 이메일입니다.");
       } else {
         setErrorMessage("회원가입에 실패했습니다. 입력값을 확인해주세요.");

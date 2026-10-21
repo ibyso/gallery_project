@@ -16,3 +16,24 @@ export type UserSignup = {
   age: string;
   gender: "Male" | "Female" | "";
 };
+
+export type UserSignupRequest = {
+  email: string;
+  name: string;
+  password: string;
+  age: number;
+  gender: "Male" | "Female";
+};
+
+export type UserSignupResponse = {
+  user_id: number;
+  email: string;
+  name: string;
+  age: number;
+  gender: "Male" | "Female";
+};
+
+export type UserLoginResponse = {
+  access_token: string;
+  token_type: string;
+};
