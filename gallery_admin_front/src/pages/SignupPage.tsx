@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { FiLogIn } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import { signup } from "../apis/userApi";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 const SignupPage = () => {
+  const { login, isAuthenticated, isInitialized } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -61,6 +63,14 @@ const SignupPage = () => {
       setIsLoading(false);
     }
   };
+
+  if (!isInitialized) {
+    return <div>인증 확인 중...</div>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-slate-100 px-4 py-8">
