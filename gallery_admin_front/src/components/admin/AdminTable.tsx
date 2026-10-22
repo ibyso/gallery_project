@@ -19,7 +19,7 @@ const AdminTable = ({ admins, onHandleAllow }: AdminListProps) => {
 
       {/* 테이블 */}
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[700px] text-left text-sm">
+        <table className="w-full min-w-175 text-left text-sm">
           <thead className="bg-slate-50 text-slate-600">
             <tr>
               <th className="px-6 py-4 font-semibold">번호</th>

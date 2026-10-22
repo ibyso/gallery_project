@@ -8,7 +8,10 @@ from admin.exceptions.admin_userinfo import AdminInvalidAllowedException, AdminP
 from datetime import timedelta
 
 # 전체 목록
-def select_all_admin(db: Session, data: AdminSearchParams) -> AdminPageResponse:
+def select_all_admin(db: Session, data: AdminSearchParams, current_user:UserInfo) -> AdminPageResponse:
+    # 접근 제어
+    if current_user.role not in (UserRole.Admin, UserRole.Manager) or current_user.allow != UserAllowed.Approved :
+        raise AdminPermissionDeniedError
 
     stmt = select(UserInfo)
 
@@ -71,6 +74,10 @@ def select_all_admin(db: Session, data: AdminSearchParams) -> AdminPageResponse:
 def update_allow_admin(db: Session, user_id:int, allow_status:str, current_user:UserInfo):
     if allow_status not in UserAllowed :
         raise AdminInvalidAllowedException
+
+    # 접근 제어
+    if current_user.role != UserRole.Admin or current_user.allow != UserAllowed.Approved :
+        raise AdminPermissionDeniedError
     
     user = db.get(UserInfo, user_id)
 
@@ -80,12 +87,8 @@ def update_allow_admin(db: Session, user_id:int, allow_status:str, current_user:
     if user.allow == allow_status :
         raise AdminInvalidAllowedException
 
-    if current_user.role != UserRole.Admin or current_user.allow != UserAllowed.Approved :
-        raise AdminPermissionDeniedError
 
     user.allow = allow_status
     db.commit()
     db.refresh(user)
     return user
-
-    
