@@ -8,6 +8,7 @@ from admin.routers.member_router import admin_member_router
 from userinfo.routers.userinfo_router import userinfo_router
 from board.festival.routers.festival_router import festival_router
 from db.models.festival_likes import FestivalLikes
+from userinfo.routers.like_router import like_router
 from board.festivalLikes.routers.like_router import like_router
 
 
