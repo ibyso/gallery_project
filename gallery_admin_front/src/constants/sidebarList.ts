@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { FiLayers, FiGrid, FiUsers, FiFileText, FiClock, FiBell, FiSettings, FiBarChart2 } from "react-icons/fi";
+import { FiBarChart2, FiBell, FiGrid, FiLayers, FiSettings, FiUsers } from "react-icons/fi";
 
 export interface AdminMenuItem {
   title: string;
@@ -25,7 +25,7 @@ export const adminMenus: AdminMenuGroup[] = [
       },
       {
         title: "관리자 관리",
-        path: "/employees",
+        path: "/admin",
         icon: FiUsers,
       },
       {

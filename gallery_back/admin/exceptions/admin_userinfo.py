@@ -6,6 +6,13 @@ class AdminNotAcceptException(Exception):
 class AdminRejectException(Exception):
     pass
 
+# allow 코드 타입이 정합하지 않은 경우
+class AdminInvalidAllowedException(Exception):
+    pass
+
+# 권한이 인정되지 않는 경우
+class AdminPermissionDeniedError(Exception):
+    pass
 
 # 유저를 못 찾을 경우
 class UserNotFoundException(Exception):

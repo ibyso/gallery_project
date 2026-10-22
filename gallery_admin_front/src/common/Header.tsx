@@ -2,16 +2,17 @@ import { FiGrid, FiLogIn, FiLogOut, FiMenu, FiUser } from "react-icons/fi";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { adminMenus } from "../constants/sidebarList";
+import { useAuth } from "../hooks/useAuth";
 
 interface HeaderProps {
   onMenuClick: () => void;
-  isLoggedIn: boolean;
-  userName?: string;
 }
 
-const Header = ({ onMenuClick, isLoggedIn, userName }: HeaderProps) => {
+const Header = ({ onMenuClick }: HeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { user, isAuthenticated, logout } = useAuth();
 
   // 현재 경로에 해당하는 메뉴
   const currentMenu = adminMenus.flatMap((group) => group.children).find((item) => item.path === location.pathname);
@@ -41,18 +42,18 @@ const Header = ({ onMenuClick, isLoggedIn, userName }: HeaderProps) => {
       </div>
 
       <div className="flex shrink-0 items-center gap-4">
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <>
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600">
                 <FiUser size={18} />
               </div>
 
-              <span className="hidden text-sm font-medium text-slate-700 sm:block">{userName ?? "회원"}</span>
+              <span className="hidden text-sm font-medium text-slate-700 sm:block">{user?.name ?? "회원"}</span>
 
               <button
                 type="button"
-                onClick={() => navigate("/login")}
+                onClick={logout}
                 className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-blue-400 px-4 py-2 text-sm font-medium whitespace-nowrap text-white transition-colors hover:bg-blue-200"
               >
                 <FiLogOut size={16} />

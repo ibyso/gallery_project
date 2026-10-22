@@ -1,45 +1,64 @@
-import { Link, useNavigate } from "react-router-dom";
-import { FiEye, FiEyeOff, FiLock, FiLogIn, FiUser } from "react-icons/fi";
 import React, { useState } from "react";
+import { FiLock, FiLogIn, FiUser } from "react-icons/fi";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { signin } from "../apis/userApi";
+import InputField from "../components/InputField";
+// import { useAuth } from "../common/AuthContext";
+import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { login, isAuthenticated, isInitialized } = useAuth();
+  const [loginForm, setLoginForm] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = loginForm;
 
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // 로그인 처리
-  const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    setError("");
-
-    if (!userId.trim() || !password) {
-      setError("아이디와 비밀번호를 입력해주세요.");
-      return;
-    }
-
     setIsLoading(true);
-
     try {
-      // TODO: FastAPI 로그인 API 연동
-      // const response = await axios.post("/api/auth/login", {
-      //   user_id: userId,
-      //   password,
-      // });
+      const result = await signin(loginForm);
+      await login(result.access_token);
 
-      // 임시 로그인 처리
-      console.log("로그인 요청:", { userId });
-
-      navigate("/admin", { replace: true });
-    } catch {
-      setError("로그인에 실패했습니다. 다시 시도해주세요.");
+      // 첫 페이지로 이동
+      navigate("/");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response);
+        const detail = error.response?.data.detail;
+        if (Array.isArray(detail)) {
+          setError(detail[0].msg ?? "로그인에 실패했습니다.");
+        } else {
+          setError(detail ?? "로그인에 실패했습니다.");
+        }
+      } else {
+        setError(String(error));
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  if (!isInitialized) {
+    return <div>인증 확인 중...</div>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-slate-100 px-4 py-8">
@@ -56,66 +75,30 @@ const LoginPage = () => {
         </div>
 
         {/* 로그인 폼 */}
-        <form onSubmit={handleLogin} className="space-y-5">
-          {/* 아이디 */}
-          <div>
-            <label htmlFor="userId" className="mb-2 block text-sm font-medium text-slate-700">
-              아이디
-            </label>
-
-            <div className="relative">
-              <FiUser
-                size={18}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-
-              <input
-                id="userId"
-                type="text"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
-                placeholder="아이디를 입력하세요"
-                autoComplete="username"
-                required
-                className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-10 pr-4 text-sm outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-              />
-            </div>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* 이메일 */}
+          <InputField
+            label="이메일"
+            id="email"
+            name="email"
+            type="text"
+            value={email}
+            icon={FiUser}
+            onChange={handleChange}
+            placeholder="이메일을 입력하세요"
+          />
 
           {/* 비밀번호 */}
-          <div>
-            <label htmlFor="password" className="mb-2 block text-sm font-medium text-slate-700">
-              비밀번호
-            </label>
-
-            <div className="relative">
-              <FiLock
-                size={18}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="비밀번호를 입력하세요"
-                autoComplete="current-password"
-                required
-                className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-10 pr-11 text-sm outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-              />
-
-              {/* 비밀번호 표시/숨김 */}
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 표시"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-              >
-                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-              </button>
-            </div>
-          </div>
+          <InputField
+            label="비밀번호"
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            icon={FiLock}
+            onChange={handleChange}
+            placeholder="비밀번호를 입력하세요"
+          />
 
           {/* 오류 메시지 */}
           {error && (

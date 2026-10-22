@@ -1,12 +1,11 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from db.models.userinfo import UserInfo, UserRole, Gender
+from db.models.userinfo import UserInfo, UserRole, Gender, UserAllowed
+from core.security import create_access_token, hash_password, verify_password
 from admin.schemas.userinfo import UserInfoCreate, Token
-from core.security import hash_password, verify_password
 from userinfo.exceptions.userinfo import UserAlreadyExistsException, InvalidPasswordException, UserNotFoundException
 from admin.exceptions.admin_userinfo import AdminNotAcceptException, AdminRejectException
-from core.security import create_access_token
 
 
 # 회원가입
@@ -46,8 +45,11 @@ def authenticate_admin(db: Session,email: str,password: str) -> UserInfo | None:
     if not verify_password(password, user.password):
         raise InvalidPasswordException
 
-    if user.allow is False :
+    if user.allow == UserAllowed.Pending :
         raise AdminNotAcceptException
+
+    if user.allow == UserAllowed.Rejected :
+            raise AdminRejectException
 
     access_token = create_access_token(data={"sub":str(user.user_id)})
 
