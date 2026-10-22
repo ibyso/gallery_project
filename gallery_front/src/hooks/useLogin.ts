@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signin } from "../apis/userApi";
 import { useAuth } from "../common/AuthContext";
 import type { UserLogin } from "../types/user";
+import axios from "axios";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export const useLogin = () => {
     } catch (error) {
       console.error("로그인 오류:", error);
 
-      if (error instanceof Error && error.message.includes("401")) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
         setErrorMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
       } else {
         setErrorMessage("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");

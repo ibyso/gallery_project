@@ -1,32 +1,8 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getMyInfo } from "../apis/userInfoGet";
+import { useMyInfo } from "../hooks/useMyInfo";
 
 const MyPage = () => {
-  // 로그인한 사용자의 이름
-  const [nickname, setNickname] = useState("회원님");
-
-  // 회원정보 조회
-  useEffect(() => {
-    const fetchMyInfo = async () => {
-      const token = sessionStorage.getItem("access_token");
-
-      if (!token) {
-        return;
-      }
-
-      try {
-        const user = await getMyInfo(token);
-
-        // DB의 name을 닉네임으로 사용
-        setNickname(user.name);
-      } catch (error) {
-        console.error("회원정보 조회 실패:", error);
-      }
-    };
-
-    fetchMyInfo();
-  }, []);
+  const { nickname } = useMyInfo();
 
   return (
     <div className="min-h-screen bg-[#fafaf8] text-[#292c28]">
@@ -72,7 +48,7 @@ const MyPage = () => {
           <p className="mb-3 text-sm font-medium text-[#58654f]">반가워요</p>
 
           <h1 className="text-3xl font-bold leading-snug tracking-tight md:text-4xl">
-            회원님,
+            {nickname} 님,
             <br />
             오늘도 좋은 하루예요.
           </h1>

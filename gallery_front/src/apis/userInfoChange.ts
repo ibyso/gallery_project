@@ -1,42 +1,23 @@
+import type { UserUpdateRequest, UserUpdateResponse } from "../types/user";
+import axios from "axios";
+import axiosInstance from "./axios";
 
-// 회원정보 변경 요청 데이터
-export interface UserUpdateRequest {
-  email: string | null;
-  name: string | null;
-  password: string | null;
-  current_password: string | null;
-}
+export const updateUser = async (data: UserUpdateRequest): Promise<UserUpdateResponse> => {
+  try {
+    const response = await axiosInstance.patch<UserUpdateResponse>("/users/me", data);
 
-// 회원정보 변경 응답 데이터
-export interface UserUpdateResponse {
-  user_id: number;
-  email: string;
-  name: string;
-}
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const detail = error.response?.data?.detail;
 
-// 회원정보 변경 API
-export const updateUser = async (
-  data: UserUpdateRequest,
-  token: string
-): Promise<UserUpdateResponse> => {
-  const response = await fetch("http://127.0.0.1:8000/users/me", {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
+      throw new Error(
+        typeof detail === "string"
+          ? detail
+          : `회원정보 변경 요청 실패 (${error.response?.status ?? "알 수 없음"})`,
+      );
+    }
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    throw new Error(
-      typeof errorData?.detail === "string"
-        ? errorData.detail
-        : `회원정보 변경 요청 실패 (${response.status})`
-    );
+    throw error;
   }
-
-  return response.json();
 };
