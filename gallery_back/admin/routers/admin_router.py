@@ -26,13 +26,13 @@ async def get_admins(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="조회 권한이 없습니다.",
         )
-    result = select_all_admin(db=db, data=data)
+    result = select_all_admin(db=db, data=data, current_user=current_user)
 
     return result
 
 # 관리자 승인 갱신
 @admin_user_router.patch("/{user_id}/{allow_status}", response_model=dict)
-async def get_admins(user_id:int, allow_status:str, current_user:UserInfo=Depends(get_current_user), db: Session = Depends(get_db)):
+async def patch_admins(user_id:int, allow_status:str, current_user:UserInfo=Depends(get_current_user), db: Session = Depends(get_db)):
     try:
         update_allow_admin(db=db,user_id=user_id,allow_status=allow_status,current_user=current_user)
 

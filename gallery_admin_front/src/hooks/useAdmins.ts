@@ -9,11 +9,6 @@ export const initialAdminPage: UserPageRespoonse = {
   page: 1,
   size: 10,
   total_pages: 0,
-  //   criteria: "",
-  //   keyword: "",
-  //   start_date: "",
-  //   end_date: "",
-  //   isAllow: ""
 };
 
 const parseSearchParams = (params: URLSearchParams): UserSearchParams => {
@@ -46,7 +41,6 @@ const parseSearchParams = (params: URLSearchParams): UserSearchParams => {
   };
 };
 
-// const useAdmins = ({ page, size, criteria, keyword, start_date, end_date, isAllow }: UserSearchParams) => {
 const useAdmins = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<UserPageRespoonse>(initialAdminPage);

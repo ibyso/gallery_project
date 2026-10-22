@@ -30,7 +30,7 @@ export const adminMenus: AdminMenuGroup[] = [
       },
       {
         title: "회원 관리",
-        path: "/notices",
+        path: "/member",
         icon: FiBell,
       },
       {

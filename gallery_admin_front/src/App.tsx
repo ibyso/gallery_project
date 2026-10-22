@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import AdminManagement from "./pages/admin/AdminManagement";
+import MemberManagement from "./pages/member/MemberManagement";
 import ProtectedRoute from "./components/ProtectedRouter";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="/admin" element={<AdminManagement />} />
+            <Route path="/member" element={<MemberManagement />} />
           </Route>
         </Route>
       </Routes>
