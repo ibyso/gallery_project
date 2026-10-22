@@ -67,7 +67,10 @@ const MyPage = () => {
 
           <div className="space-y-4">
             {/* 좋아요 목록 */}
-            <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+            <Link
+              to="/users/likes"
+              className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-colors hover:border-[#58654f]"
+            >
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#fde9e3]">
                 <svg className="h-7 w-7 text-[#dc624b]" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 21s-9-5.7-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.3-9 12-9 12Z" />
@@ -80,7 +83,7 @@ const MyPage = () => {
               </div>
 
               <span className="text-2xl text-gray-400">›</span>
-            </div>
+            </Link>
 
             {/* 캘린더 */}
             <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
