@@ -12,7 +12,7 @@ from userinfo.exceptions.userinfo import UserAlreadyExistsException, UserNotFoun
 # 회원 관련 API Router
 admin_user_router = APIRouter(tags=["Admin_users"])
 
-
+# 로그인한 회원 정보
 @admin_user_router.get("/me", response_model=UserInfoResponse)
 async def read_me(current_user:UserInfo=Depends(get_current_user))->UserInfoResponse :
     return current_user
@@ -49,9 +49,17 @@ def signin(data: UserInfoLogin, db: Session = Depends(get_db)):
         )
 
     except AdminNotAcceptException:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="회원가입 대기중인 계정입니다. \n문의:010-xxxx-xxxx",
-            )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="회원가입 대기중인 계정입니다. \n문의:010-xxxx-xxxx",
+        )
+
+    except AdminNotAcceptException:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="회원가입이 거부된 계정입니다. \n문의:010-xxxx-xxxx",
+        )
 
     return token
+
+

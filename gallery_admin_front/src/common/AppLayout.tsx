@@ -1,19 +1,15 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import Header from "./Header";
 import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import Header from "./Header";
 
 const AppLayout = () => {
-  // react-router-dom을 이용해 경로 설정
-  const navigate = useNavigate();
-  const { isLoggedIn, logout } = { isLoggedIn: true, logout: () => {} };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const userName = "홍길동";
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-slate-50 text-slate-900">
       {/* Header */}
-      <Header onMenuClick={() => setIsSidebarOpen(true)} isLoggedIn={isLoggedIn} userName={userName} />
+      <Header onMenuClick={() => setIsSidebarOpen(true)} />
 
       {/* Content */}
       <div className="flex min-h-0 flex-1">

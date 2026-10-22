@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from board.festivalComments.routers.comment_router import comment_router
 from admin.routers.migration_router import migration_router
+from admin.routers import userinfo_router, admin_router
 from admin.routers.userinfo_router import admin_user_router
 from userinfo.routers.userinfo_router import userinfo_router
 from board.festival.routers.festival_router import festival_router

@@ -1,15 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
-import { FiLock, FiLogIn, FiUser } from "react-icons/fi";
 import React, { useState } from "react";
-import { signin, getCurrentUser } from "../apis/userApi";
+import { FiLock, FiLogIn, FiUser } from "react-icons/fi";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { signin } from "../apis/userApi";
 import InputField from "../components/InputField";
 // import { useAuth } from "../common/AuthContext";
-import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated, isInitialized } = useAuth();
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
@@ -32,8 +32,7 @@ const LoginPage = () => {
     setIsLoading(true);
     try {
       const result = await signin(loginForm);
-
-      login(result.access_token);
+      await login(result.access_token);
 
       // 첫 페이지로 이동
       navigate("/");
@@ -42,9 +41,9 @@ const LoginPage = () => {
         console.log(error.response);
         const detail = error.response?.data.detail;
         if (Array.isArray(detail)) {
-          setError(detail[0].msg ?? "회원가입에 실패했습니다.");
+          setError(detail[0].msg ?? "로그인에 실패했습니다.");
         } else {
-          setError(detail ?? "회원가입에 실패했습니다.");
+          setError(detail ?? "로그인에 실패했습니다.");
         }
       } else {
         setError(String(error));
@@ -53,6 +52,13 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+  if (!isInitialized) {
+    return <div>인증 확인 중...</div>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-slate-100 px-4 py-8">

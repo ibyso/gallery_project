@@ -1,19 +1,30 @@
 import { useState, type SubmitEvent } from "react";
-import { FiSearch, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { FiSearch, FiChevronDown, FiChevronUp, FiRefreshCw } from "react-icons/fi";
 
-import type { AdminSearchFilters, SearchCategory } from "../../types/admin";
+import type { AdminSearchFilters, SearchCategory } from "../../types/users";
 import { initialAdminFilters } from "../../constants/admin";
 
 interface AdminSearchProps {
+  searchParams: URLSearchParams;
   onSearch: (filters: AdminSearchFilters) => void;
   onReset: () => void;
 }
 
-const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
+const AdminSearch = ({ searchParams, onSearch, onReset }: AdminSearchProps) => {
   const [filters, setFilters] = useState<AdminSearchFilters>({
     ...initialAdminFilters,
+    criteria: searchParams.get("criteria") === "email" ? "email" : "name",
+    keyword: searchParams.get("keyword") ?? "",
+    start_date: searchParams.get("start_date") ?? "",
+    end_date: searchParams.get("end_date") ?? "",
+    isAllow: (() => {
+      const value = searchParams.get("isAllow");
+      return value === "Approved" || value === "Pending" || value === "Rejected" ? value : undefined;
+    })(),
   });
-  const [showDetail, setShowDetail] = useState(false);
+  const [showDetail, setShowDetail] = useState(
+    Boolean(searchParams.get("start_date") || searchParams.get("end_date") || searchParams.get("isAllow")),
+  );
   const [error, setError] = useState("");
 
   // 검색 조건 변경
@@ -29,7 +40,7 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (showDetail && filters.startDate && filters.endDate && filters.startDate > filters.endDate) {
+    if (showDetail && filters.start_date && filters.end_date && filters.start_date > filters.end_date) {
       setError("시작일은 종료일보다 늦을 수 없습니다.");
       return;
     }
@@ -38,10 +49,11 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
 
     onSearch({
       ...filters,
-      keyword: filters.keyword.trim(),
-      startDate: showDetail ? filters.startDate : "",
-      endDate: showDetail ? filters.endDate : "",
-      status: showDetail ? filters.status : "all",
+      criteria: filters.criteria,
+      keyword: filters.keyword ? filters.keyword.trim() : "",
+      start_date: showDetail ? filters.start_date : "",
+      end_date: showDetail ? filters.end_date : "",
+      isAllow: showDetail ? filters.isAllow : "",
     });
   };
 
@@ -63,12 +75,12 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
           {/* 카테고리 선택 */}
           <select
             aria-label="검색 카테고리"
-            value={filters.category}
-            onChange={(e) => updateFilter("category", e.target.value as SearchCategory)}
+            value={filters.criteria}
+            onChange={(e) => updateFilter("criteria", e.target.value as SearchCategory)}
             className={`${inputClass} w-32`}
           >
+            <option value="">전체</option>
             <option value="name">이름</option>
-            <option value="userId">아이디</option>
             <option value="email">이메일</option>
           </select>
 
@@ -89,6 +101,16 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
           >
             <FiSearch size={16} />
             검색
+          </button>
+
+          {/* 검색 조건 초기화 */}
+          <button
+            type="button"
+            onClick={handleReset}
+            className="flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
+          >
+            <FiRefreshCw size={16} />
+            초기화
           </button>
         </div>
         <div className="mt-3 flex justify-center">
@@ -116,9 +138,9 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
                 <input
                   id="adminStartDate"
                   type="date"
-                  value={filters.startDate}
-                  max={filters.endDate || undefined}
-                  onChange={(e) => updateFilter("startDate", e.target.value)}
+                  value={filters.start_date}
+                  max={filters.end_date || undefined}
+                  onChange={(e) => updateFilter("start_date", e.target.value)}
                   className={inputClass}
                 />
               </div>
@@ -134,9 +156,9 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
                 <input
                   id="adminEndDate"
                   type="date"
-                  value={filters.endDate}
-                  min={filters.startDate || undefined}
-                  onChange={(e) => updateFilter("endDate", e.target.value)}
+                  value={filters.end_date}
+                  min={filters.start_date || undefined}
+                  onChange={(e) => updateFilter("end_date", e.target.value)}
                   className={inputClass}
                 />
               </div>
@@ -149,14 +171,14 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
 
                 <select
                   id="adminAccountStatus"
-                  value={filters.status}
-                  onChange={(e) => updateFilter("status", e.target.value as AdminSearchFilters["status"])}
+                  value={filters.isAllow}
+                  onChange={(e) => updateFilter("isAllow", e.target.value as AdminSearchFilters["isAllow"])}
                   className={`${inputClass} min-w-36`}
                 >
-                  <option value="all">전체</option>
-                  <option value="active">활성</option>
-                  <option value="pending">승인 대기</option>
-                  <option value="inactive">비활성</option>
+                  <option value="">전체</option>
+                  <option value="Approved">승인됨</option>
+                  <option value="Pending">승인 대기</option>
+                  <option value="Rejected">비활성</option>
                 </select>
               </div>
             </div>
@@ -167,17 +189,6 @@ const AdminSearch = ({ onSearch, onReset }: AdminSearchProps) => {
                 {error}
               </p>
             )}
-
-            {/* 검색 조건 초기화 */}
-            <div className="mt-5 flex justify-center">
-              <button
-                type="button"
-                onClick={handleReset}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
-              >
-                검색 조건 초기화
-              </button>
-            </div>
           </div>
         )}
       </form>
