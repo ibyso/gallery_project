@@ -35,7 +35,7 @@ export const adminMenus: AdminMenuGroup[] = [
       },
       {
         title: "게시글 관리",
-        path: "/notices",
+        path: "/festival",
         icon: FiBell,
       },
     ],
