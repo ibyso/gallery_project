@@ -38,14 +38,15 @@ def remove_like(like_id: int, user_id: int, db: Session):
 
 
 def get_likes_by_user_id(user_id: int, db: Session):
-    stmt = select(Festival).join(FestivalLikes, FestivalLikes.festival_id == Festival.id).where(FestivalLikes.user_id == user_id).order_by(FestivalLikes.like_id.asc())
+    stmt = (select(FestivalLikes, Festival).join(Festival, FestivalLikes.festival_id == Festival.id).where(FestivalLikes.user_id == user_id).order_by(FestivalLikes.like_id.asc()))
 
-    likesInfo = db.scalars(stmt).all()
+    rows = db.execute(stmt).all()
 
     return [
         {
-            "title": info.title,
-            "festival_id": info.id
+            "like_id": like.like_id,
+            "festival_id": festival.id,
+            "title": festival.title,
         }
-        for info in likesInfo
+        for like, festival in rows
     ]

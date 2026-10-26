@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useAuth } from "../common/AuthContext";
 import type { Post } from "../types/post";
 import { FiHeart } from "react-icons/fi";
 
 interface PostGridProps {
   posts: Post[];
   onSelectPost: (id: number) => void;
+  likedIds: number[];
+  toggleLike: (festivalId: number) => Promise<void>;
 }
 
 function formatDate(date?: string | null) {
@@ -14,23 +14,7 @@ function formatDate(date?: string | null) {
   return `${date.slice(0, 4)}.${date.slice(4, 6)}.${date.slice(6, 8)}`;
 }
 
-function PostGrid({ posts, onSelectPost }: PostGridProps) {
-  const { isLoggedIn } = useAuth();
-  const [likedIds, setLikedIds] = useState<number[]>([]);
-
-  const toggleLike = (postId: number) => {
-    if (!isLoggedIn) {
-      alert("로그인 후 좋아요를 누를 수 있습니다.");
-      return;
-    }
-
-    if (likedIds.includes(postId)) {
-      setLikedIds(likedIds.filter((id) => id !== postId));
-    } else {
-      setLikedIds([...likedIds, postId]);
-    }
-  };
-
+function PostGrid({ posts, onSelectPost, likedIds, toggleLike }: PostGridProps) {
   return (
     <section className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
       {posts.map((post) => {
@@ -71,7 +55,7 @@ function PostGrid({ posts, onSelectPost }: PostGridProps) {
               <button
                 type="button"
                 onClick={() => toggleLike(post.id)}
-                aria-label={`${post.title} 좋아요`}
+                aria-label={`${post.title} ${isLiked ? "좋아요 취소" : "좋아요"}`}
                 aria-pressed={isLiked}
                 className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100"
               >

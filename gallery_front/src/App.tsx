@@ -5,9 +5,11 @@ import PostModal from "./components/PostModal";
 import WeeklyWeather from "./components/WeeklyWeather";
 import { usePosts } from "./hooks/usePosts";
 import { useAuth } from "./common/AuthContext";
+import useFestivalLikes from "./hooks/useFestivalLikes";
 
 function App() {
   const { currentUserId } = useAuth();
+  const { likedIds, toggleLike } = useFestivalLikes();
 
   const {
     search,
@@ -42,7 +44,12 @@ function App() {
         <h2 className="mb-3 text-3xl font-semibold">현재 진행중인 축제</h2>
 
         {/* 사진 갤러리 */}
-        <PostGrid posts={currentPosts} onSelectPost={setSelectedId} />
+        <PostGrid
+          posts={currentPosts}
+          onSelectPost={setSelectedId}
+          likedIds={likedIds}
+          toggleLike={toggleLike}
+        />
 
         {/* 페이지 이동 버튼 */}
         <Pagination
@@ -57,6 +64,8 @@ function App() {
         <PostModal
           key={`${selectedPost.id}:${currentUserId}`}
           selectedPost={selectedPost}
+          isLiked={likedIds.includes(selectedPost.id)}
+          toggleLike={toggleLike}
           comments={comments}
           commentsLoading={commentsLoading}
           comment={comment}
