@@ -8,6 +8,7 @@ import { useComments } from "../hooks/useComments";
 import { getFestivals } from "../apis/festivalApi";
 import PostModal from "../components/PostModal";
 import type { Post } from "../types/post";
+import useFestivalLikes from "../hooks/useFestivalLikes";
 
 const FestivalLike = () => {
   const [likes, setLikes] = useState<LikedFestival[]>([]);
@@ -16,6 +17,21 @@ const FestivalLike = () => {
 
   // 로그인한 사용자 ID
   const { currentUserId } = useAuth();
+  const { likedIds, toggleLike } = useFestivalLikes();
+
+  const handleLike = async (festivalId: number) => {
+    await toggleLike(festivalId);
+
+    const token = sessionStorage.getItem("access_token");
+    if (!token) return;
+
+    try {
+      setLikes(await getMyLikes(token));
+    } catch (error) {
+      console.error("좋아요 목록 갱신 실패:", error);
+      setErrorMessage("좋아요 목록을 다시 불러오지 못했습니다.");
+    }
+  };
 
   // 선택한 축제의 상세 데이터
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -161,6 +177,8 @@ const FestivalLike = () => {
           <PostModal
             key={`${selectedPost.id}:${currentUserId}`}
             selectedPost={selectedPost}
+            isLiked={likedIds.includes(selectedPost.id)}
+            toggleLike={handleLike}
             comments={commentData.comments}
             commentsLoading={commentData.loading}
             comment={comment}
