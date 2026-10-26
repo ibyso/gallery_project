@@ -1,35 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { getMyLikes, type LikedFestival } from "../apis/userLikes";
 import { useAuth } from "../common/AuthContext";
+import { useFestivalLikes } from "../hooks/useFestivalLikes";
 import { usePostModal } from "../hooks/usePostModal";
 import useFestivalComments from "../hooks/useFestivalComments";
 import { useComments } from "../hooks/useComments";
-import { getFestivals } from "../apis/festivalApi";
 import PostModal from "../components/PostModal";
-import type { Post } from "../types/post";
+import { useLikedFestivalDetail } from "../hooks/useLikedFestivalDetail";
 
 const FestivalLike = () => {
-  const [likes, setLikes] = useState<LikedFestival[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { likes, loading, errorMessage } = useFestivalLikes();
 
-  // 로그인한 사용자 ID
   const { currentUserId } = useAuth();
 
-  // 선택한 축제의 상세 데이터
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-
-  // 댓글 입력값
   const [comment, setComment] = useState("");
 
-  // 모달 관리
   const { selectedId, setSelectedId, closeModal } = usePostModal(setComment);
 
-  // 선택한 축제의 댓글 조회
+  const { selectedPost, setSelectedPost, handleFestivalClick } =
+    useLikedFestivalDetail(setSelectedId);
+
   const commentData = useFestivalComments(selectedId);
 
-  // 댓글 작성, 수정, 삭제
   const commentActions = useComments(
     selectedId,
     commentData.comments,
@@ -38,63 +30,6 @@ const FestivalLike = () => {
     setComment,
     commentData.refresh,
   );
-
-  useEffect(() => {
-    const fetchLikes = async () => {
-      const token = sessionStorage.getItem("access_token");
-
-      if (!token) {
-        setErrorMessage("로그인이 필요합니다.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const data = await getMyLikes(token);
-        setLikes(data);
-      } catch {
-        setErrorMessage("좋아요 목록을 불러오지 못했습니다.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLikes();
-  }, []);
-
-  // 좋아요 목록에서 축제 클릭 시 상세 정보 조회
-  const handleFestivalClick = async (festivalId: number) => {
-    try {
-      // 전체 축제 목록 가져오기
-      const festivals = await getFestivals();
-
-      // 클릭한 축제 ID와 일치하는 축제 찾기
-      const festival = festivals.find((item) => item.id === festivalId);
-
-      // 일치하는 축제가 없을 경우
-      if (!festival) {
-        window.alert("해당 축제를 찾을 수 없습니다.");
-        return;
-      }
-
-      // PostModal에서 사용하는 데이터 형태로 변환
-      const post: Post = {
-        id: festival.id,
-        title: festival.title,
-        image: festival.thumbnail ?? "",
-        startdate: festival.startdate,
-        enddate: festival.enddate,
-        program: festival.program,
-        comments: [],
-      };
-
-      setSelectedPost(post);
-      setSelectedId(festivalId);
-    } catch (error) {
-      console.error("축제 상세 조회 실패:", error);
-      window.alert("축제 정보를 불러오지 못했습니다.");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#fafaf8] text-[#292c28]">
