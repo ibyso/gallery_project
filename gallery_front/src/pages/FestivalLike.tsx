@@ -101,13 +101,11 @@ const FestivalLike = () => {
       <div className="mx-auto max-w-5xl px-6 py-8">
         {/* 상단 헤더 */}
         <header className="flex items-center justify-between border-b border-gray-200 pb-5">
-          <Link to="/" className="text-sm text-gray-500 hover:text-[#58654f]">
-            HOME
+          <Link to="/" className="text-xl font-bold">
+            ▣ HOME
           </Link>
-
           <h1 className="text-lg font-semibold">좋아요 목록</h1>
-
-          <Link to="/users/mypage" className="text-sm text-gray-500 hover:text-[#58654f]">
+          <Link to="/users/mypage" className="text-lg font-semibold">
             MY PAGE
           </Link>
         </header>

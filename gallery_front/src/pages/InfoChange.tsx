@@ -21,9 +21,13 @@ const InfoChange = () => {
       <div className="mx-auto max-w-5xl px-6 py-8">
         {/* 상단 헤더 */}
         <header className="flex items-center justify-between border-b border-gray-200 pb-5">
-          <span>EDIT PROFILE</span>
+          <Link to="/" className="text-xl font-bold">
+            ▣ HOME
+          </Link>
 
-          <Link to="/users/mypage" className="text-sm text-gray-500 hover:text-[#58654f]">
+          <h2 className="text-lg font-semibold">EDIT PROFILE</h2>
+
+          <Link to="/users/mypage" className="text-lg font-semibold">
             MY PAGE
           </Link>
         </header>
