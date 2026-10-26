@@ -1,14 +1,17 @@
 import axios from "axios";
-import type {
-  CommentCreate,
-  CommentResponse,
-  CommentUpdate,
-} from "../types/festivalComment";
+import type { CommentCreate, CommentResponse, CommentUpdate } from "../types/festivalComment";
 
 const url = "http://127.0.0.1:8000/comments";
 
 export const postComment = async (comment: CommentCreate) => {
-  const response = await axios.post(`${url}`, comment);
+  const token = sessionStorage.getItem("access_token");
+
+  const response = await axios.post(url, comment, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   return response.data;
 };
 
@@ -20,10 +23,7 @@ export const getComments = async (contentId: number) => {
   return response.data;
 };
 
-export const putComment = async (
-  comment_id: number,
-  comment: CommentUpdate,
-) => {
+export const putComment = async (comment_id: number, comment: CommentUpdate) => {
   const response = await axios.put(`${url}/${comment_id}`, comment);
   return response.data;
 };
