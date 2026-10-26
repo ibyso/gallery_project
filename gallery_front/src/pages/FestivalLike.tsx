@@ -1,26 +1,31 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../common/AuthContext";
+import { useFestivalLikes } from "../hooks/useFestivalLikes";
+import { useLikedFestivalDetail } from "../hooks/useLikedFestivalDetail";
 import { usePostModal } from "../hooks/usePostModal";
 import useFestivalComments from "../hooks/useFestivalComments";
 import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
-import useFestivalLikes from "../hooks/useFestivalLikes";
-import { useLikedFestivalDetail } from "../hooks/useLikedFestivalDetail";
 
 const FestivalLike = () => {
   const { likes, loading, errorMessage, likedIds, toggleLike } = useFestivalLikes();
 
+  // 로그인한 사용자 정보
   const { currentUserId } = useAuth();
   const [comment, setComment] = useState("");
 
+  // 모달 관리
   const { selectedId, setSelectedId, closeModal } = usePostModal(setComment);
 
+  // 좋아요한 축제의 상세 정보
   const { selectedPost, setSelectedPost, handleFestivalClick } =
     useLikedFestivalDetail(setSelectedId);
 
+  // 댓글 조회
   const commentData = useFestivalComments(selectedId);
 
+  // 댓글 작성, 수정, 삭제
   const commentActions = useComments(
     selectedId,
     commentData.comments,
@@ -38,7 +43,9 @@ const FestivalLike = () => {
           <Link to="/" className="text-xl font-bold">
             ▣ HOME
           </Link>
+
           <h1 className="text-lg font-semibold">좋아요 목록</h1>
+
           <Link to="/users/mypage" className="text-lg font-semibold">
             MY PAGE
           </Link>

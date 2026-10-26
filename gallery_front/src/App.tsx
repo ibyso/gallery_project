@@ -5,7 +5,7 @@ import PostModal from "./components/PostModal";
 import WeeklyWeather from "./components/WeeklyWeather";
 import { usePosts } from "./hooks/usePosts";
 import { useAuth } from "./common/AuthContext";
-import useFestivalLikes from "./hooks/useFestivalLikes";
+import { useFestivalLikes } from "./hooks/useFestivalLikes";
 
 function App() {
   const { currentUserId } = useAuth();
