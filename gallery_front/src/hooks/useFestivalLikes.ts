@@ -3,51 +3,44 @@ import { useAuth } from "../common/AuthContext";
 import { getMyLikes, postLike, deleteLike } from "../apis/likeApi";
 import type { LikeResponse } from "../types/like";
 
-// 카드와 모달이 같은 좋아요 목록과 변경 함수를 사용
-const useFestivalLikes = () => {
-  const { isLoggedIn, currentUserId } = useAuth();
-  const [likes, setLikes] = useState<{
-    userId: number | null;
-    items: LikeResponse[];
-  }>({ userId: null, items: [] });
-
-  useEffect(() => {
-    if (!isLoggedIn || currentUserId === null) return;
-
-    let ignore = false;
-
-    const fetchLikes = async () => {
-      try {
-        const serverData = await getMyLikes();
-        if (!ignore) {
-          setLikes({ userId: currentUserId, items: serverData });
-        }
-      } catch (error) {
-        console.error("좋아요 조회 실패:", error);
-import { getMyLikes, type LikedFestival } from "../apis/userLikes";
-
 export const useFestivalLikes = () => {
-  const [likes, setLikes] = useState<LikedFestival[]>([]);
+  const { isLoggedIn, currentUserId } = useAuth();
+
+  const [likes, setLikes] = useState<LikeResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // 좋아요 목록 조회
   useEffect(() => {
-    const fetchLikes = async () => {
-      const token = sessionStorage.getItem("access_token");
+    let ignore = false;
 
-      if (!token) {
+    const fetchLikes = async () => {
+      setLoading(true);
+      setErrorMessage("");
+      setLikes([]);
+
+      if (!isLoggedIn || currentUserId === null) {
         setErrorMessage("로그인이 필요합니다.");
         setLoading(false);
         return;
       }
 
       try {
-        const data = await getMyLikes(token);
-        setLikes(data);
-      } catch {
-        setErrorMessage("좋아요 목록을 불러오지 못했습니다.");
+        const data = await getMyLikes();
+
+        if (!ignore) {
+          setLikes(data);
+        }
+      } catch (error) {
+        console.error("좋아요 목록 조회 실패:", error);
+
+        if (!ignore) {
+          setErrorMessage("좋아요 목록을 불러오지 못했습니다.");
+        }
       } finally {
-        setLoading(false);
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
 
@@ -58,24 +51,21 @@ export const useFestivalLikes = () => {
     };
   }, [isLoggedIn, currentUserId]);
 
-  const myLikes = isLoggedIn && likes.userId === currentUserId
-    ? likes.items
-    : [];
-  const likedIds = myLikes.map((like) => like.festival_id);
+  // 좋아요한 축제 ID 목록
+  const likedIds = likes.map((like) => like.festival_id);
 
+  // 좋아요 등록 및 취소
   const toggleLike = async (festivalId: number) => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || currentUserId === null) {
       alert("로그인 후 좋아요를 누를 수 있습니다.");
       return;
     }
 
-    if (currentUserId === null || likes.userId !== currentUserId) {
-      alert("좋아요 목록을 불러온 후 다시 시도해주세요.");
+    if (loading) {
       return;
     }
 
-    const existingLike = myLikes.find((like) => like.festival_id === festivalId);
-    const token = sessionStorage.getItem("access_token");
+    const existingLike = likes.find((like) => like.festival_id === festivalId);
 
     try {
       if (existingLike) {
@@ -84,27 +74,20 @@ export const useFestivalLikes = () => {
         await postLike(festivalId);
       }
 
-      // 계정이 바뀌었다면 이전 요청 결과를 반영하지 않음
-      if (sessionStorage.getItem("access_token") !== token) return;
-      const serverData = await getMyLikes();
-      if (sessionStorage.getItem("access_token") === token) {
-        setLikes({ userId: currentUserId, items: serverData });
-      }
+      // 서버에서 최신 좋아요 목록 다시 조회
+      const data = await getMyLikes();
+      setLikes(data);
     } catch (error) {
       console.error("좋아요 처리 실패:", error);
-      alert("좋아요 처리에 실패했습니다. 새로고침 후 목록을 확인해주세요.");
+      alert("좋아요 처리에 실패했습니다.");
     }
   };
-
-  return { likedIds, toggleLike };
-};
-
-export default useFestivalLikes;
-  }, []);
 
   return {
     likes,
     loading,
     errorMessage,
+    likedIds,
+    toggleLike,
   };
 };

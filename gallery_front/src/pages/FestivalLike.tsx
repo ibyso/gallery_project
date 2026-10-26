@@ -2,43 +2,33 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../common/AuthContext";
 import { useFestivalLikes } from "../hooks/useFestivalLikes";
+import { useLikedFestivalDetail } from "../hooks/useLikedFestivalDetail";
 import { usePostModal } from "../hooks/usePostModal";
 import useFestivalComments from "../hooks/useFestivalComments";
 import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
-import type { Post } from "../types/post";
-import useFestivalLikes from "../hooks/useFestivalLikes";
-import { useLikedFestivalDetail } from "../hooks/useLikedFestivalDetail";
 
 const FestivalLike = () => {
-  const { likes, loading, errorMessage } = useFestivalLikes();
+  // 좋아요 목록 조회
+  const { likes, loading, errorMessage, likedIds, toggleLike } = useFestivalLikes();
 
+  // 로그인한 사용자 정보
   const { currentUserId } = useAuth();
-  const { likedIds, toggleLike } = useFestivalLikes();
 
-  const handleLike = async (festivalId: number) => {
-    await toggleLike(festivalId);
-
-    const token = sessionStorage.getItem("access_token");
-    if (!token) return;
-
-    try {
-      setLikes(await getMyLikes(token));
-    } catch (error) {
-      console.error("좋아요 목록 갱신 실패:", error);
-      setErrorMessage("좋아요 목록을 다시 불러오지 못했습니다.");
-    }
-  };
-
+  // 댓글 입력 상태
   const [comment, setComment] = useState("");
 
+  // 모달 관리
   const { selectedId, setSelectedId, closeModal } = usePostModal(setComment);
 
+  // 좋아요한 축제의 상세 정보
   const { selectedPost, setSelectedPost, handleFestivalClick } =
     useLikedFestivalDetail(setSelectedId);
 
+  // 댓글 조회
   const commentData = useFestivalComments(selectedId);
 
+  // 댓글 작성, 수정, 삭제
   const commentActions = useComments(
     selectedId,
     commentData.comments,
@@ -56,7 +46,9 @@ const FestivalLike = () => {
           <Link to="/" className="text-xl font-bold">
             ▣ HOME
           </Link>
+
           <h1 className="text-lg font-semibold">좋아요 목록</h1>
+
           <Link to="/users/mypage" className="text-lg font-semibold">
             MY PAGE
           </Link>
@@ -112,7 +104,7 @@ const FestivalLike = () => {
             key={`${selectedPost.id}:${currentUserId}`}
             selectedPost={selectedPost}
             isLiked={likedIds.includes(selectedPost.id)}
-            toggleLike={handleLike}
+            toggleLike={toggleLike}
             comments={commentData.comments}
             commentsLoading={commentData.loading}
             comment={comment}
