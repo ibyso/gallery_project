@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import PostGrid from "./components/PostGrid";
 import Pagination from "./components/Pagination";
 import PostModal from "./components/PostModal";
+import WeeklyWeather from "./components/WeeklyWeather";
 import { usePosts } from "./hooks/usePosts";
 import { useAuth } from "./common/AuthContext";
 
@@ -32,13 +33,12 @@ function App() {
   return (
     <div className="min-h-screen text-[#292c28]">
       {/* 헤더 */}
-      <Header
-        search={search}
-        setSearch={setSearch}
-        setCurrentPage={setCurrentPage}
-      />
+      <Header search={search} setSearch={setSearch} setCurrentPage={setCurrentPage} />
       {/* 메인 콘텐츠 */}
       <main className="mx-auto max-w-7xl px-6 py-12">
+        {/* 서울 7일 날씨 */}
+        <WeeklyWeather />
+
         <h2 className="mb-3 text-3xl font-semibold">일상의 장면을 모으다</h2>
 
         <p className="mb-10 text-sm text-gray-500">
