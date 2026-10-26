@@ -5,6 +5,7 @@ from admin.routers.migration_router import migration_router
 from admin.routers import userinfo_router, admin_router
 from admin.routers.userinfo_router import admin_user_router
 from admin.routers.member_router import admin_member_router
+from admin.routers.festival_router import admin_festival_router
 from userinfo.routers.userinfo_router import userinfo_router
 from board.festival.routers.festival_router import festival_router
 from db.models.festival_likes import FestivalLikes
@@ -28,4 +29,5 @@ app.include_router(comment_router, prefix="/comments")
 app.include_router(like_router, prefix="/likes")
 app.include_router(admin_user_router, prefix="/admin")
 app.include_router(admin_member_router, prefix="/admin/member")
+app.include_router(admin_festival_router, prefix="/admin/festivals")
 app.include_router(migration_router, prefix="/migration")

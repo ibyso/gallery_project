@@ -46,15 +46,15 @@ const MemberManagement = () => {
     <div className="space-y-6">
       {/* 페이지 제목 */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-800">관리자 관리</h1>
+        <h1 className="text-2xl font-bold text-slate-800">회원 관리</h1>
 
-        <p className="mt-1 text-sm text-slate-500">관리자 계정을 조회하고 관리합니다.</p>
+        <p className="mt-1 text-sm text-slate-500">회원 계정을 조회하고 관리합니다.</p>
       </div>
 
       {/* 검색 컴포넌트 */}
       <MemberSearch searchParams={searchParams} onSearch={handleSearch} onReset={handleReset} />
 
-      {/* 관리자 목록 컴포넌트 */}
+      {/* 회원 목록 컴포넌트 */}
       <MemberTable members={data.items} onHandleAllow={onHandleAllow} />
       <Pagination
         currentPage={data.page}
