@@ -9,7 +9,7 @@ import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
 
 const FestivalLike = () => {
-  const { likes, loading, errorMessage, likedIds, toggleLike } = useFestivalLikes();
+  const { likes, loading, errorMessage, likedIds, toggleLike, likeCounts } = useFestivalLikes();
 
   // 로그인한 사용자 정보
   const { currentUserId } = useAuth();
@@ -101,6 +101,9 @@ const FestivalLike = () => {
             key={`${selectedPost.id}:${currentUserId}`}
             selectedPost={selectedPost}
             isLiked={likedIds.includes(selectedPost.id)}
+            likeCount={likeCounts === null ? undefined : likeCounts.find(
+              (item) => item.festival_id === selectedPost.id,
+            )?.like_count ?? 0}
             toggleLike={toggleLike}
             comments={commentData.comments}
             commentsLoading={commentData.loading}

@@ -50,3 +50,24 @@ def get_likes_by_user_id(user_id: int, db: Session):
         }
         for like, festival in rows
     ]
+
+
+def get_like_counts(db: Session):
+    stmt = select(FestivalLikes.festival_id)
+    festival_ids = db.scalars(stmt).all()
+
+    counts = {}
+
+    for festival_id in festival_ids:
+        if festival_id in counts:
+            counts[festival_id] += 1
+        else:
+            counts[festival_id] = 1
+
+    return [
+        {
+            "festival_id": festival_id,
+            "like_count": count,
+        }
+        for festival_id, count in counts.items()
+    ]
