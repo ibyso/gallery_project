@@ -9,13 +9,10 @@ import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
 
 const FestivalLike = () => {
-  // 좋아요 목록 조회
   const { likes, loading, errorMessage, likedIds, toggleLike } = useFestivalLikes();
 
   // 로그인한 사용자 정보
   const { currentUserId } = useAuth();
-
-  // 댓글 입력 상태
   const [comment, setComment] = useState("");
 
   // 모달 관리
