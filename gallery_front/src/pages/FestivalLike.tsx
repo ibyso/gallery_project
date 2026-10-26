@@ -1,35 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../common/AuthContext";
-import { useFestivalLikes } from "../hooks/useFestivalLikes";
 import { usePostModal } from "../hooks/usePostModal";
 import useFestivalComments from "../hooks/useFestivalComments";
 import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
-import type { Post } from "../types/post";
 import useFestivalLikes from "../hooks/useFestivalLikes";
 import { useLikedFestivalDetail } from "../hooks/useLikedFestivalDetail";
 
 const FestivalLike = () => {
-  const { likes, loading, errorMessage } = useFestivalLikes();
+  const { likes, loading, errorMessage, likedIds, toggleLike } = useFestivalLikes();
 
   const { currentUserId } = useAuth();
-  const { likedIds, toggleLike } = useFestivalLikes();
-
-  const handleLike = async (festivalId: number) => {
-    await toggleLike(festivalId);
-
-    const token = sessionStorage.getItem("access_token");
-    if (!token) return;
-
-    try {
-      setLikes(await getMyLikes(token));
-    } catch (error) {
-      console.error("좋아요 목록 갱신 실패:", error);
-      setErrorMessage("좋아요 목록을 다시 불러오지 못했습니다.");
-    }
-  };
-
   const [comment, setComment] = useState("");
 
   const { selectedId, setSelectedId, closeModal } = usePostModal(setComment);
@@ -112,7 +94,7 @@ const FestivalLike = () => {
             key={`${selectedPost.id}:${currentUserId}`}
             selectedPost={selectedPost}
             isLiked={likedIds.includes(selectedPost.id)}
-            toggleLike={handleLike}
+            toggleLike={toggleLike}
             comments={commentData.comments}
             commentsLoading={commentData.loading}
             comment={comment}
