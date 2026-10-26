@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from core.dependencies import get_current_user
 from db.database import get_db
 from db.models.userinfo import UserInfo
-from ..services.like_services import add_like, remove_like, get_likes_by_user_id
+from ..services.like_services import add_like, remove_like, get_likes_by_user_id, get_like_counts
 from ..exceptions.like_exception import LikeNotFoundExcepton, LikeAlreadyExistsException
 from ..schemas.like_schemas import AddLike
 from userinfo.exceptions.userinfo import UserCredentialsException
@@ -39,3 +39,8 @@ async def get_likes(db: Session = Depends(get_db), current_user: UserInfo = Depe
     likes = get_likes_by_user_id(user_id=current_user.user_id, db=db,)
 
     return likes
+
+
+@like_router.get("/counts", response_model=list[dict])
+def read_like_counts(db: Session = Depends(get_db)):
+    return get_like_counts(db=db)
