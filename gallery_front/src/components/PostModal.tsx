@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { FiHeart } from "react-icons/fi";
 import type { CommentResponse } from "../types/festivalComment";
 import type { Post } from "../types/post";
 
 interface PostModalProps {
   selectedPost: Post;
-  isLiked: boolean;
-  toggleLike: (festivalId: number) => Promise<void>;
   comments: CommentResponse[];
   commentsLoading: boolean;
   comment: string;
@@ -24,8 +21,6 @@ interface PostModalProps {
 
 function PostModal({
   selectedPost,
-  isLiked,
-  toggleLike,
   comments,
   commentsLoading,
   comment,
@@ -89,27 +84,11 @@ function PostModal({
           <div className="flex items-center justify-between border-b p-5">
             <div>
               <h3 className="font-semibold">{selectedPost.title}</h3>
-              <div className="mt-2 flex items-center gap-2">
-                <p className="text-xs text-gray-400">
-                  {commentsLoading
-                    ? "댓글 불러오는 중…"
-                    : `댓글 ${comments.length}`}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => toggleLike(selectedPost.id)}
-                  aria-label={`${selectedPost.title} ${isLiked ? "좋아요 취소" : "좋아요"}`}
-                  aria-pressed={isLiked}
-                  className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100"
-                >
-                  <FiHeart
-                    aria-hidden="true"
-                    className={isLiked
-                      ? "h-5 w-5 fill-red-500 text-red-500"
-                      : "h-5 w-5 text-gray-400"}
-                  />
-                </button>
-              </div>
+              <p className="mt-2 text-xs text-gray-400">
+                {commentsLoading
+                  ? "댓글 불러오는 중…"
+                  : `댓글 ${comments.length}`}
+              </p>
             </div>
 
             <button
