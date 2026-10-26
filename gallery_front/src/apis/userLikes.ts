@@ -6,7 +6,7 @@ export interface LikedFestival {
 
 // 로그인한 사용자의 좋아요 목록 조회
 export const getMyLikes = async (token: string): Promise<LikedFestival[]> => {
-  const response = await fetch("http://127.0.0.1:8000/users/me/likes", {
+  const response = await fetch("http://127.0.0.1:8000/likes/me", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

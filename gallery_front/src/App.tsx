@@ -41,11 +41,7 @@ function App() {
         {/* 서울 7일 날씨 */}
         <WeeklyWeather />
 
-        <h2 className="mb-3 text-3xl font-semibold">일상의 장면을 모으다</h2>
-
-        <p className="mb-10 text-sm text-gray-500">
-          잠시 머물고 싶은 순간들, 사진을 열어 함께 이야기를 나눠보세요.
-        </p>
+        <h2 className="mb-3 text-3xl font-semibold">현재 진행중인 축제</h2>
 
         {/* 사진 갤러리 */}
         <PostGrid
