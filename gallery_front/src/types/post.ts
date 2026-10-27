@@ -4,6 +4,7 @@ import type { UserResponse } from "./user";
 export type Post = {
   id: number;
   title: string;
+  addr1?: string | null;
   image: string;
   startdate?: string | null;
   enddate?: string | null;
@@ -24,6 +25,7 @@ export type FestivalResponse = {
 export type FestivalListItem = {
   id: number;
   title: string;
+  addr1: string | null;
   thumbnail: string | null;
   startdate: string | null;
   enddate: string | null;

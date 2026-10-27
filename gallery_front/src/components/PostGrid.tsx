@@ -1,10 +1,12 @@
 import type { Post } from "../types/post";
 import { FiHeart } from "react-icons/fi";
+import type { LikeCount } from "../types/like";
 
 interface PostGridProps {
   posts: Post[];
   onSelectPost: (id: number) => void;
   likedIds: number[];
+  likeCounts: LikeCount[] | null;
   toggleLike: (festivalId: number) => Promise<void>;
 }
 
@@ -14,11 +16,14 @@ function formatDate(date?: string | null) {
   return `${date.slice(0, 4)}.${date.slice(4, 6)}.${date.slice(6, 8)}`;
 }
 
-function PostGrid({ posts, onSelectPost, likedIds, toggleLike }: PostGridProps) {
+function PostGrid({ posts, onSelectPost, likedIds, likeCounts, toggleLike }: PostGridProps) {
   return (
     <section className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
       {posts.map((post) => {
         const isLiked = likedIds.includes(post.id);
+        const likeCount = likeCounts?.find(
+          (item) => item.festival_id === post.id,
+        )?.like_count;
 
         return (
           <article key={post.id} className="min-w-0">
@@ -52,6 +57,7 @@ function PostGrid({ posts, onSelectPost, likedIds, toggleLike }: PostGridProps) 
                 </button>
               </h3>
 
+              <div className="flex shrink-0 items-center gap-1">
               <button
                 type="button"
                 onClick={() => toggleLike(post.id)}
@@ -68,6 +74,10 @@ function PostGrid({ posts, onSelectPost, likedIds, toggleLike }: PostGridProps) 
                   }
                 />
               </button>
+              <span aria-label="좋아요 개수" aria-live="polite" className="text-xs tabular-nums text-gray-500">
+                {likeCounts === null ? "…" : likeCount ?? 0}
+              </span>
+              </div>
             </div>
 
             <p className="mt-2 min-h-8 text-xs leading-4 text-gray-500">

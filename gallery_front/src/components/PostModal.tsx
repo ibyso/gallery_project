@@ -6,6 +6,7 @@ import type { Post } from "../types/post";
 interface PostModalProps {
   selectedPost: Post;
   isLiked: boolean;
+  likeCount?: number;
   toggleLike: (festivalId: number) => Promise<void>;
   comments: CommentResponse[];
   commentsLoading: boolean;
@@ -25,6 +26,7 @@ interface PostModalProps {
 function PostModal({
   selectedPost,
   isLiked,
+  likeCount,
   toggleLike,
   comments,
   commentsLoading,
@@ -109,6 +111,9 @@ function PostModal({
                       : "h-5 w-5 text-gray-400"}
                   />
                 </button>
+                <span aria-label="좋아요 개수" aria-live="polite" className="text-xs tabular-nums text-gray-500">
+                  {likeCount ?? "…"}
+                </span>
               </div>
             </div>
 

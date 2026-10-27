@@ -1,4 +1,4 @@
-import type { LikeResponse } from "../types/like";
+import type { LikeCount, LikeResponse } from "../types/like";
 import axiosInstance from "./axios";
 
 // 내 좋아요 목록 조회
@@ -16,5 +16,11 @@ export const postLike = async (festivalId: number) => {
 // 좋아요 취소: 좋아요 ID 사용
 export const deleteLike = async (likeId: number) => {
   const response = await axiosInstance.delete(`/likes/${likeId}`);
+  return response.data;
+};
+
+export const getLikeCounts = async () => {
+  const response = await axiosInstance.get<LikeCount[]>("/likes/counts");
+
   return response.data;
 };

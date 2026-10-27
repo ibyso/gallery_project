@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../common/AuthContext";
-import { getMyLikes, postLike, deleteLike } from "../apis/likeApi";
-import type { LikeResponse } from "../types/like";
+import { getMyLikes, postLike, deleteLike, getLikeCounts } from "../apis/likeApi";
+import type { LikeCount, LikeResponse } from "../types/like";
 
 export const useFestivalLikes = () => {
   const { isLoggedIn, currentUserId } = useAuth();
@@ -9,6 +9,27 @@ export const useFestivalLikes = () => {
   const [likes, setLikes] = useState<LikeResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [likeCounts, setLikeCounts] = useState<LikeCount[] | null>(null);
+
+  // 전체 좋아요 개수는 로그인하지 않아도 조회
+  useEffect(() => {
+    let ignore = false;
+
+    const fetchCounts = async () => {
+      try {
+        const data = await getLikeCounts();
+        if (!ignore) setLikeCounts(data);
+      } catch (error) {
+        console.error("좋아요 개수 조회 실패:", error);
+      }
+    };
+
+    fetchCounts();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   // 좋아요 목록 조회
   useEffect(() => {
@@ -77,6 +98,8 @@ export const useFestivalLikes = () => {
       // 서버에서 최신 좋아요 목록 다시 조회
       const data = await getMyLikes();
       setLikes(data);
+      const counts = await getLikeCounts();
+      setLikeCounts(counts);
     } catch (error) {
       console.error("좋아요 처리 실패:", error);
       alert("좋아요 처리에 실패했습니다.");
@@ -89,5 +112,6 @@ export const useFestivalLikes = () => {
     errorMessage,
     likedIds,
     toggleLike,
+    likeCounts,
   };
 };

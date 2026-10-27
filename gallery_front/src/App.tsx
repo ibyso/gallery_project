@@ -9,7 +9,7 @@ import { useFestivalLikes } from "./hooks/useFestivalLikes";
 
 function App() {
   const { currentUserId } = useAuth();
-  const { likedIds, toggleLike } = useFestivalLikes();
+  const { likedIds, toggleLike, likeCounts } = useFestivalLikes();
 
   const {
     search,
@@ -48,6 +48,7 @@ function App() {
           posts={currentPosts}
           onSelectPost={setSelectedId}
           likedIds={likedIds}
+          likeCounts={likeCounts}
           toggleLike={toggleLike}
         />
 
@@ -65,6 +66,9 @@ function App() {
           key={`${selectedPost.id}:${currentUserId}`}
           selectedPost={selectedPost}
           isLiked={likedIds.includes(selectedPost.id)}
+          likeCount={likeCounts === null ? undefined : likeCounts.find(
+            (item) => item.festival_id === selectedPost.id,
+          )?.like_count ?? 0}
           toggleLike={toggleLike}
           comments={comments}
           commentsLoading={commentsLoading}
