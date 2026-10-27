@@ -2,23 +2,12 @@ from pydantic import BaseModel, Field, ConfigDict, field_validator
 from datetime import datetime, date
 from enum import Enum
 
-from userinfo.schemas.userinfo import UserInfoResponse
-
+# from admin.schemas.comment import CommentResponse
 
 class SearchCriteria(str, Enum):
     ALL = ""
     TITLE = "title"
     ADDR = "addr"
-
-class CommentResponse(BaseModel):
-    comment_id: int
-    body: str
-    user_id: int
-    # 댓글 작성자 정보
-    user: UserInfoResponse
-    content_id: int
-    created_at: datetime
-    updated_at: datetime
 
 class FestivalResponse(BaseModel):
     # festivals pydantic 모델을 해당 모델로 변환 허용
@@ -41,7 +30,7 @@ class FestivalResponse(BaseModel):
     is_public : bool | None = None
     is_delete : bool | None = None
     program : str | None = None
-    comments : list[CommentResponse]
+    # comments : list[CommentResponse]
 
     @field_validator("startdate", "enddate", mode="before")
     @classmethod
@@ -55,18 +44,18 @@ class FestivalResponse(BaseModel):
         return value
 
 
-class FestivalPageResponse(BaseModel):
-    items: list[FestivalResponse]
-    total: int
-    page: int
-    size: int
-    total_pages: int
-    criteria : str | None = None
-    keyword : str | None = None
-    start_date : date | None = None
-    end_date : date | None = None
-    is_public : bool | None = None
-    is_delete : bool | None = None
+# class FestivalPageResponse(BaseModel):
+#     items: list[FestivalResponse]
+#     total: int
+#     page: int
+#     size: int
+#     total_pages: int
+#     criteria : str | None = None
+#     keyword : str | None = None
+#     start_date : date | None = None
+#     end_date : date | None = None
+#     is_public : bool | None = None
+#     is_delete : bool | None = None
 
 
 class FestivalSearchParams(BaseModel):

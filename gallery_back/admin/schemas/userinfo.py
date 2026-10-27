@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, AfterValidator
+from pydantic import BaseModel, EmailStr, Field, AfterValidator, ConfigDict
 from typing import Annotated
 from db.models.userinfo import Gender
 import re
@@ -46,6 +46,8 @@ class UserInfoCreate(BaseModel):
 
 # 회원가입 응답 데이터
 class UserInfoResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     user_id: int
     email: EmailStr
     name: str

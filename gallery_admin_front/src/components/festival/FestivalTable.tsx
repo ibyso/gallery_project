@@ -2,16 +2,16 @@ import type { FestivalRespoonse } from "../../types/festivals";
 
 interface FestivalListProps {
   datas: FestivalRespoonse[];
-  onHandleAllow: (key: string, user_id: number) => void;
+  onHandlePublic: (key: string, user_id: number) => void;
 }
 
-const FestivalTable = ({ datas, onHandleAllow }: FestivalListProps) => {
+const FestivalTable = ({ datas, onHandlePublic }: FestivalListProps) => {
   return (
     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* 테이블 제목 */}
       <div className="border-b border-slate-200 px-6 py-4">
         <h2 className="text-base font-semibold text-slate-800">
-          관리자 목록
+          게시글 목록
           <span className="ml-2 text-sm font-normal text-blue-600">총 {datas.length}건</span>
         </h2>
       </div>
@@ -25,12 +25,11 @@ const FestivalTable = ({ datas, onHandleAllow }: FestivalListProps) => {
               <th className="px-6 py-4 font-semibold">제목</th>
               <th className="px-6 py-4 font-semibold">주소</th>
               <th className="px-6 py-4 font-semibold">진행일</th>
-              <th className="px-6 py-4 font-semibold">전화번호</th>
               <th className="px-6 py-4 font-semibold">행사시간</th>
               <th className="px-6 py-4 font-semibold">행사장소</th>
+              <th className="px-6 py-4 font-semibold">전화번호</th>
               <th className="px-6 py-4 font-semibold">댓글수</th>
               <th className="px-6 py-4 font-semibold">공개여부</th>
-              <th className="px-6 py-4 font-semibold">삭제여부</th>
             </tr>
           </thead>
 
@@ -46,10 +45,20 @@ const FestivalTable = ({ datas, onHandleAllow }: FestivalListProps) => {
                   <td className="px-6 py-4 text-slate-500">
                     {data.startdate?.split("T")[0]} ~ {data.enddate?.split("T")[0]}
                   </td>
-                  <td className="px-6 py-4 text-slate-500">{data.tel}</td>
                   <td className="px-6 py-4 text-slate-500">{data.playtime}</td>
                   <td className="px-6 py-4 text-slate-500">{data.eventplace}</td>
+                  <td className="px-6 py-4 text-slate-500">{data.tel}</td>
                   <td className="px-6 py-4 text-slate-500">{data.comments ? data.comments.length : 0}</td>
+                  <td className="px-6 py-4 text-slate-500">
+                    <select
+                      value={String(data.is_public)}
+                      onChange={(e) => onHandlePublic(e.target.value, data.id)}
+                      className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500"
+                    >
+                      <option value="true">공개</option>
+                      <option value="false">비공개</option>
+                    </select>
+                  </td>
                 </tr>
               ))
             ) : (

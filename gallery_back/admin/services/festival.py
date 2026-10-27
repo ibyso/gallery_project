@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 
 from db.models.userinfo import UserInfo, UserRole, UserAllowed
 from db.models.festival import Festival
-from admin.schemas.festival import FestivalSearchParams, FestivalPageResponse, SearchCriteria
+from admin.schemas.festival import FestivalSearchParams, SearchCriteria
+from admin.schemas.festival_comment import FestivalPageResponse
 from admin.exceptions.admin_userinfo import AdminPermissionDeniedError
 
 from datetime import timedelta
@@ -63,13 +64,6 @@ def select_all_festivals(db: Session, data: FestivalSearchParams, current_user:U
     )
 
     items = db.scalars(stmt).all()
-
-    print("items Chekcer")
-    for item in items:
-        print({
-            column.name: getattr(item, column.name)
-            for column in item.__table__.columns
-        })
 
     return FestivalPageResponse(
         items=items,

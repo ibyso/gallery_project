@@ -13,7 +13,7 @@ interface MemberSearchProps {
 const MemberSearch = ({ searchParams, onSearch, onReset }: MemberSearchProps) => {
   const [filters, setFilters] = useState<AdminSearchFilters>({
     ...initialAdminFilters,
-    criteria: searchParams.get("criteria") === "email" ? "email" : "name",
+    criteria: searchParams.get("criteria") === "email" ? "email" : searchParams.get("criteria") == "name" ? "name" : "",
     keyword: searchParams.get("keyword") ?? "",
     start_date: searchParams.get("start_date") ?? "",
     end_date: searchParams.get("end_date") ?? "",

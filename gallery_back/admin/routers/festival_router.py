@@ -6,7 +6,8 @@ from db.models.userinfo import UserInfo
 from core.dependencies import get_current_user
 from db.models.festival import Festival
 from admin.services.festival import select_all_festivals, update_festival_public
-from admin.schemas.festival import FestivalSearchParams, FestivalPageResponse, SearchCriteria, FestivalResponse
+from admin.schemas.festival import FestivalSearchParams
+from admin.schemas.festival_comment import FestivalPageResponse
 from admin.exceptions.admin_userinfo import AdminPermissionDeniedError
 
 from typing import Annotated

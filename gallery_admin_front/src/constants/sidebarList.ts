@@ -38,22 +38,27 @@ export const adminMenus: AdminMenuGroup[] = [
         path: "/festival",
         icon: FiBell,
       },
-    ],
-  },
-  {
-    title: "SYSTEM",
-    icon: FiSettings,
-    children: [
       {
-        title: "통계 및 보고서",
-        path: "/reports",
-        icon: FiBarChart2,
-      },
-      {
-        title: "시스템 설정",
-        path: "/settings",
-        icon: FiSettings,
+        title: "댓글 관리",
+        path: "/comment",
+        icon: FiBell,
       },
     ],
   },
+  // {
+  //   title: "SYSTEM",
+  //   icon: FiSettings,
+  //   children: [
+  //     {
+  //       title: "통계 및 보고서",
+  //       path: "/reports",
+  //       icon: FiBarChart2,
+  //     },
+  //     {
+  //       title: "시스템 설정",
+  //       path: "/settings",
+  //       icon: FiSettings,
+  //     },
+  //   ],
+  // },
 ];
