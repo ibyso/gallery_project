@@ -32,6 +32,7 @@ class Festival(Base):
     posted_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=True)
     is_public:Mapped[bool] = mapped_column(default=True, nullable=True)
     is_delete:Mapped[bool] = mapped_column(default=False, nullable=True)
+    views: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     comments: Mapped[list["Comment"]] = relationship("Comment",back_populates="festivals")
     likes: Mapped[list["FestivalLikes"]] = relationship("FestivalLikes",back_populates="festivals")
