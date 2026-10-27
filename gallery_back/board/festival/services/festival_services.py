@@ -12,6 +12,7 @@ def get_festivals(db: Session) -> list[dict]:
         {
             "id": festival.id,
             "title": festival.title,
+            "addr1": festival.addr1,
             "thumbnail": festival.thumbnail,
             "startdate": festival.startdate,
             "enddate": festival.enddate,
