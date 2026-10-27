@@ -1,4 +1,4 @@
-import type { UserRespoonse } from "./users";
+import type { CommentResponse } from "./comments";
 
 export type SearchCategory = "title" | "addr" | "";
 
@@ -12,16 +12,6 @@ export type FestivalSearchFilters = {
 };
 
 export type FestivalSearchParams = FestivalSearchFilters & { page?: number; size?: number };
-
-export type CommentResponse = {
-  id: number;
-  body: string;
-  user_id: number;
-  user: UserRespoonse;
-  content_id: number;
-  created_at: string;
-  updated_at: string;
-};
 
 export type FestivalRespoonse = {
   id: number;

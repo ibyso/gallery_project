@@ -22,7 +22,8 @@ export const initialFilters: FestivalSearchFilters = {
 const FestivalSearch = ({ searchParams, onSearch, onReset }: SearchProps) => {
   const [filters, setFilters] = useState<FestivalSearchFilters>({
     ...initialFilters,
-    criteria: searchParams.get("criteria") === "addr" ? "addr" : "title",
+    criteria:
+      searchParams.get("criteria") === "addr" ? "addr" : searchParams.get("criteria") === "title" ? "title" : "",
     keyword: searchParams.get("keyword") ?? "",
     start_date: searchParams.get("start_date") ?? "",
     end_date: searchParams.get("end_date") ?? "",
@@ -179,7 +180,7 @@ const FestivalSearch = ({ searchParams, onSearch, onReset }: SearchProps) => {
               {/* 계정 상태 */}
               <div className="flex flex-col gap-2">
                 <label htmlFor="festival_isPublic" className="text-sm font-medium text-slate-600">
-                  계정 상태
+                  공개 여부
                 </label>
 
                 <select

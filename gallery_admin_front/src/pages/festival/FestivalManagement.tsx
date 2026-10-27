@@ -38,7 +38,7 @@ const FestivalManagement = () => {
     });
   };
 
-  const onHandleAllow = async (key: string, id: number) => {
+  const onHandlePublic = async (key: string, id: number) => {
     if (!id) return;
 
     try {
@@ -54,16 +54,16 @@ const FestivalManagement = () => {
     <div className="space-y-6">
       {/* 페이지 제목 */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-800">관리자 관리</h1>
+        <h1 className="text-2xl font-bold text-slate-800">게시글 관리</h1>
 
-        <p className="mt-1 text-sm text-slate-500">관리자 계정을 조회하고 관리합니다.</p>
+        <p className="mt-1 text-sm text-slate-500">게시글을 조회하고 관리합니다.</p>
       </div>
 
       {/* 검색 컴포넌트 */}
       <FestivalSearch searchParams={searchParams} onSearch={handleSearch} onReset={handleReset} />
 
       {/* 관리자 목록 컴포넌트 */}
-      <FestivalTable datas={data.items} onHandleAllow={onHandleAllow} />
+      <FestivalTable datas={data.items} onHandlePublic={onHandlePublic} />
       <Pagination
         currentPage={data.page}
         totalPages={data.total_pages}
