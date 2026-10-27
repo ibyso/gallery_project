@@ -14,6 +14,7 @@ from db.models.festival import Festival
 from db.models.userinfo import UserInfo
 from db.models.comment import Comment
 from db.models.festival_likes import FestivalLikes
+from db.models.festival_views import Festival_Views
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
