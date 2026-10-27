@@ -87,7 +87,10 @@ const MyPage = () => {
             </Link>
 
             {/* 캘린더 */}
-            <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+            <Link
+              to="/users/calendar"
+              className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-colors hover:border-[#58654f]"
+            >
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#e5eee8]">
                 <svg
                   className="h-7 w-7 text-[#58654f]"
@@ -108,7 +111,7 @@ const MyPage = () => {
               </div>
 
               <span className="text-2xl text-gray-400">›</span>
-            </div>
+            </Link>
           </div>
         </section>
       </div>
