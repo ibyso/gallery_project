@@ -1,3 +1,4 @@
+import { deleteComment } from "../../apis/commentApi";
 import CommentSearch from "../../components/comment/CommentSearch";
 import CommentTable from "../../components/comment/CommentTable";
 import Pagination from "../../components/Pagination";
@@ -37,16 +38,16 @@ const FestivalManagement = () => {
     });
   };
 
-  const onHandleDelete = async (id: number) => {
+  const onHandleDelete = async (is_delete: string, id: number) => {
     if (!id) return;
 
-    // try {
-    //   const result = await patchFestivalPublic(key, id);
-    //   alert(result.message);
-    //   fetchData();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const result = await deleteComment(id, is_delete);
+      alert(result.message);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

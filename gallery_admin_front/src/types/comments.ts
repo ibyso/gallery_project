@@ -22,6 +22,7 @@ export type CommentResponse = {
   content_id: number;
   created_at: string;
   updated_at: string;
+  is_delete: string;
 };
 
 export type CommentPageRespoonse = {
@@ -34,5 +35,5 @@ export type CommentPageRespoonse = {
   keyword?: string;
   start_date?: string;
   end_date?: string;
-  // is_delete?: boolean;
+  is_delete?: boolean;
 };

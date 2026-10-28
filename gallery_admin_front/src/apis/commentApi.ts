@@ -10,7 +10,7 @@ export const getCommentLists = async (data: CommentSearchParams) => {
 };
 
 // 댓글 삭제/취소
-export const DeleteComment = async (comment_id: number) => {
-  const response = await axiosInstance.patch(`${SERVER_URL}/${comment_id}`);
+export const deleteComment = async (comment_id: number, is_delete: string) => {
+  const response = await axiosInstance.patch(`${SERVER_URL}/${comment_id}/${is_delete}`);
   return response.data;
 };
