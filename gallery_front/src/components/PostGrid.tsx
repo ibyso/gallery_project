@@ -16,7 +16,13 @@ function formatDate(date?: string | null) {
   return `${date.slice(0, 4)}.${date.slice(4, 6)}.${date.slice(6, 8)}`;
 }
 
-function PostGrid({ posts, onSelectPost, likedIds, likeCounts, toggleLike }: PostGridProps) {
+function PostGrid({
+  posts,
+  onSelectPost,
+  likedIds,
+  likeCounts,
+  toggleLike,
+}: PostGridProps) {
   return (
     <section className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
       {posts.map((post) => {
@@ -57,26 +63,39 @@ function PostGrid({ posts, onSelectPost, likedIds, likeCounts, toggleLike }: Pos
                 </button>
               </h3>
 
-              <div className="flex shrink-0 items-center gap-1">
-              <button
-                type="button"
-                onClick={() => toggleLike(post.id)}
-                aria-label={`${post.title} ${isLiked ? "좋아요 취소" : "좋아요"}`}
-                aria-pressed={isLiked}
-                className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100"
-              >
-                <FiHeart
-                  aria-hidden="true"
-                  className={
-                    isLiked
-                      ? "h-5 w-5 fill-red-500 text-red-500"
-                      : "h-5 w-5 text-gray-400"
-                  }
-                />
-              </button>
-              <span aria-label="좋아요 개수" aria-live="polite" className="text-xs tabular-nums text-gray-500">
-                {likeCounts === null ? "…" : likeCount ?? 0}
-              </span>
+              <div className="flex shrink-0 flex-col items-end">
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => toggleLike(post.id)}
+                    aria-label={`${post.title} ${isLiked ? "좋아요 취소" : "좋아요"}`}
+                    aria-pressed={isLiked}
+                    className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100"
+                  >
+                    <FiHeart
+                      aria-hidden="true"
+                      className={
+                        isLiked
+                          ? "h-5 w-5 fill-red-500 text-red-500"
+                          : "h-5 w-5 text-gray-400"
+                      }
+                    />
+                  </button>
+                  <span
+                    aria-label="좋아요 개수"
+                    aria-live="polite"
+                    className="text-xs tabular-nums text-gray-500"
+                  >
+                    {likeCounts === null ? "…" : (likeCount ?? 0)}
+                  </span>
+                </div>
+                <span
+                  aria-label="조회수"
+                  aria-live="polite"
+                  className="mt-1 whitespace-nowrap text-xs tabular-nums text-gray-400"
+                >
+                  조회 {post.views ?? "…"}
+                </span>
               </div>
             </div>
 

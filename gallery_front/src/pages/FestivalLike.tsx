@@ -9,7 +9,8 @@ import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
 
 const FestivalLike = () => {
-  const { likes, loading, errorMessage, likedIds, toggleLike, likeCounts } = useFestivalLikes();
+  const { likes, loading, errorMessage, likedIds, toggleLike, likeCounts } =
+    useFestivalLikes();
 
   // 로그인한 사용자 정보
   const { currentUserId } = useAuth();
@@ -20,7 +21,7 @@ const FestivalLike = () => {
 
   // 좋아요한 축제의 상세 정보
   const { selectedPost, setSelectedPost, handleFestivalClick } =
-    useLikedFestivalDetail(setSelectedId);
+    useLikedFestivalDetail(setSelectedId, currentUserId);
 
   // 댓글 조회
   const commentData = useFestivalComments(selectedId);
@@ -53,22 +54,30 @@ const FestivalLike = () => {
 
         {/* 페이지 제목 */}
         <section className="mt-12">
-          <p className="mb-3 text-sm font-medium text-[#58654f]">나의 관심 축제</p>
+          <p className="mb-3 text-sm font-medium text-[#58654f]">
+            나의 관심 축제
+          </p>
 
           <h2 className="text-3xl font-bold">내가 좋아요한 축제</h2>
 
-          <p className="mt-4 text-sm text-gray-500">관심 있는 축제들을 모아볼 수 있어요.</p>
+          <p className="mt-4 text-sm text-gray-500">
+            관심 있는 축제들을 모아볼 수 있어요.
+          </p>
         </section>
 
         {/* 좋아요 목록 */}
         <section className="mt-12 pb-12">
           {loading ? (
-            <p className="text-sm text-gray-500">좋아요 목록을 불러오는 중입니다.</p>
+            <p className="text-sm text-gray-500">
+              좋아요 목록을 불러오는 중입니다.
+            </p>
           ) : errorMessage ? (
             <p className="text-sm text-red-500">{errorMessage}</p>
           ) : likes.length === 0 ? (
             <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center">
-              <p className="text-gray-500">아직 좋아요를 누른 축제가 없습니다.</p>
+              <p className="text-gray-500">
+                아직 좋아요를 누른 축제가 없습니다.
+              </p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -80,7 +89,11 @@ const FestivalLike = () => {
                   className="flex w-full cursor-pointer items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 text-left shadow-sm transition-colors hover:border-[#58654f]"
                 >
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#fde9e3]">
-                    <svg className="h-7 w-7 text-[#dc624b]" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                      className="h-7 w-7 text-[#dc624b]"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <path d="M12 21s-9-5.7-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.3-9 12-9 12Z" />
                     </svg>
                   </div>
@@ -101,9 +114,13 @@ const FestivalLike = () => {
             key={`${selectedPost.id}:${currentUserId}`}
             selectedPost={selectedPost}
             isLiked={likedIds.includes(selectedPost.id)}
-            likeCount={likeCounts === null ? undefined : likeCounts.find(
-              (item) => item.festival_id === selectedPost.id,
-            )?.like_count ?? 0}
+            likeCount={
+              likeCounts === null
+                ? undefined
+                : (likeCounts.find(
+                    (item) => item.festival_id === selectedPost.id,
+                  )?.like_count ?? 0)
+            }
             toggleLike={toggleLike}
             comments={commentData.comments}
             commentsLoading={commentData.loading}

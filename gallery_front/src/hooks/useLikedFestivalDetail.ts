@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { getFestivals } from "../apis/festivalApi";
+import { getFestivals, postFestivalView } from "../apis/festivalApi";
 import type { Post } from "../types/post";
 
-export const useLikedFestivalDetail = (setSelectedId: (id: number) => void) => {
+export const useLikedFestivalDetail = (
+  setSelectedId: (id: number) => void,
+  currentUserId: number | null,
+) => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   // 좋아요 목록에서 축제 클릭 시 상세 정보 조회
@@ -24,8 +27,18 @@ export const useLikedFestivalDetail = (setSelectedId: (id: number) => void) => {
         startdate: festival.startdate,
         enddate: festival.enddate,
         program: festival.program,
+        views: festival.views,
         comments: [],
       };
+
+      if (currentUserId !== null) {
+        try {
+          const result = await postFestivalView(festivalId);
+          post.views = result.views;
+        } catch (error) {
+          console.error("조회수 증가 실패:", error);
+        }
+      }
 
       setSelectedPost(post);
       setSelectedId(festivalId);

@@ -18,7 +18,7 @@ function App() {
     setCurrentPage,
     totalPages,
     currentPosts,
-    setSelectedId,
+    openPost,
     selectedPost,
     comments,
     commentsLoading,
@@ -35,7 +35,11 @@ function App() {
   return (
     <div className="min-h-screen text-[#292c28]">
       {/* 헤더 */}
-      <Header search={search} setSearch={setSearch} setCurrentPage={setCurrentPage} />
+      <Header
+        search={search}
+        setSearch={setSearch}
+        setCurrentPage={setCurrentPage}
+      />
       {/* 메인 콘텐츠 */}
       <main className="mx-auto max-w-7xl px-6 py-12">
         {/* 서울 7일 날씨 */}
@@ -46,7 +50,7 @@ function App() {
         {/* 사진 갤러리 */}
         <PostGrid
           posts={currentPosts}
-          onSelectPost={setSelectedId}
+          onSelectPost={openPost}
           likedIds={likedIds}
           likeCounts={likeCounts}
           toggleLike={toggleLike}
@@ -66,9 +70,12 @@ function App() {
           key={`${selectedPost.id}:${currentUserId}`}
           selectedPost={selectedPost}
           isLiked={likedIds.includes(selectedPost.id)}
-          likeCount={likeCounts === null ? undefined : likeCounts.find(
-            (item) => item.festival_id === selectedPost.id,
-          )?.like_count ?? 0}
+          likeCount={
+            likeCounts === null
+              ? undefined
+              : (likeCounts.find((item) => item.festival_id === selectedPost.id)
+                  ?.like_count ?? 0)
+          }
           toggleLike={toggleLike}
           comments={comments}
           commentsLoading={commentsLoading}
