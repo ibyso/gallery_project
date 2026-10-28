@@ -17,6 +17,7 @@ class Comment(Base):
     body: Mapped[str] = mapped_column(String(500), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now)
+    is_delete:Mapped[bool] = mapped_column(nullable=False, default=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("UserInfo.user_id"), nullable=False)
     content_id: Mapped[int] = mapped_column(ForeignKey("festivals.id"), nullable=False)
 
