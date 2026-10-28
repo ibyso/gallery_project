@@ -88,39 +88,56 @@ function PostModal({
 
         {/* 축제 상세 정보와 댓글 패널 */}
         <div className="flex h-72 w-full shrink-0 flex-col md:h-full md:w-80">
-          <div className="flex items-center justify-between border-b p-5">
-            <div>
-              <h3 className="font-semibold">{selectedPost.title}</h3>
-              <div className="mt-2 flex items-center gap-2">
-                <p className="text-xs text-gray-400">
+          <div className="flex items-start justify-between gap-3 border-b p-5">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start gap-2">
+                <h3 className="min-w-0 flex-1 break-words font-semibold">
+                  {selectedPost.title}
+                </h3>
+
+              </div>
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
+                <p>
                   {commentsLoading
                     ? "댓글 불러오는 중…"
                     : `댓글 ${comments.length}`}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => toggleLike(selectedPost.id)}
-                  aria-label={`${selectedPost.title} ${isLiked ? "좋아요 취소" : "좋아요"}`}
-                  aria-pressed={isLiked}
-                  className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100"
-                >
-                  <FiHeart
-                    aria-hidden="true"
-                    className={isLiked
-                      ? "h-5 w-5 fill-red-500 text-red-500"
-                      : "h-5 w-5 text-gray-400"}
-                  />
-                </button>
-                <span aria-label="좋아요 개수" aria-live="polite" className="text-xs tabular-nums text-gray-500">
-                  {likeCount ?? "…"}
+                <span aria-label="조회수" aria-live="polite" className="whitespace-nowrap tabular-nums">
+                  조회 {selectedPost.views ?? "…"}
                 </span>
+                <div className="flex shrink-0 items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => toggleLike(selectedPost.id)}
+                    aria-label={`${selectedPost.title} ${isLiked ? "좋아요 취소" : "좋아요"}`}
+                    aria-pressed={isLiked}
+                    className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100"
+                  >
+                    <FiHeart
+                      aria-hidden="true"
+                      className={
+                        isLiked
+                          ? "h-5 w-5 fill-red-500 text-red-500"
+                          : "h-5 w-5 text-gray-400"
+                      }
+                    />
+                  </button>
+                  <span
+                    aria-label="좋아요 개수"
+                    aria-live="polite"
+                    className="text-xs tabular-nums text-gray-500"
+                  >
+                    {likeCount ?? "…"}
+                  </span>
+                </div>
               </div>
             </div>
 
             <button
+              type="button"
               onClick={closeModal}
               aria-label="닫기"
-              className="cursor-pointer rounded-full bg-gray-100 px-3 py-2"
+              className="shrink-0 cursor-pointer rounded-full bg-gray-100 px-3 py-2"
             >
               ✕
             </button>

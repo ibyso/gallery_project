@@ -33,13 +33,20 @@ export function useFestivals() {
           .filter((festival) => {
             const { startdate, enddate } = festival;
 
-            if (!startdate || !enddate || !/^\d{8}$/.test(startdate) || !/^\d{8}$/.test(enddate)) {
+            if (
+              !startdate ||
+              !enddate ||
+              !/^\d{8}$/.test(startdate) ||
+              !/^\d{8}$/.test(enddate)
+            ) {
               return false;
             }
 
             return startdate <= today && today <= enddate;
           })
-          .sort((a, b) => b.startdate!.localeCompare(a.startdate!) || a.id - b.id);
+          .sort(
+            (a, b) => b.startdate!.localeCompare(a.startdate!) || a.id - b.id,
+          );
 
         const serverPosts: Post[] = ongoingFestivals.map((festival) => ({
           id: festival.id,
@@ -49,6 +56,7 @@ export function useFestivals() {
           startdate: festival.startdate,
           enddate: festival.enddate,
           program: festival.program,
+          views: festival.views,
           comments: [],
         }));
 
