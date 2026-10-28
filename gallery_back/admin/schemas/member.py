@@ -16,6 +16,7 @@ class MemberResponse(BaseModel):
     user_id: int
     name: str
     email: str
+    age:int
     gender : str
     joined_at: datetime
     updated_at: datetime

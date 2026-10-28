@@ -5,6 +5,7 @@ from admin.migration.mapping_field import FIELD_MAPPING
 from sqlalchemy.orm import Session
 from admin.services.migration import create
 from db.database import get_db
+from core.dependencies import get_current_user
 import httpx
 
 # userinfo 모델 import missing 오류 방지용
@@ -13,7 +14,7 @@ from db.models.userinfo import UserInfo
 migration_router = APIRouter(tags=["Migration"])
 
 @migration_router.get("/migration")
-async def get_migration(db: Session = Depends(get_db),pageNo: int = 1, numOfRows: int = 10) :
+async def get_migration(db: Session = Depends(get_db),pageNo: int = 1, numOfRows: int = 10, current_user:UserInfo=Depends(get_current_user),) :
     try:
         response = await fetch_posts(pageNo,numOfRows)
         header = response["response"]["header"]
