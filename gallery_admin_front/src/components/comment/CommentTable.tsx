@@ -2,7 +2,7 @@ import type { CommentResponse } from "../../types/comments";
 
 interface CommentslListProps {
   datas: CommentResponse[];
-  onHandleDelete: (content_id: number) => void;
+  onHandleDelete: (is_delete: string, content_id: number) => void;
 }
 
 const CommentTable = ({ datas, onHandleDelete }: CommentslListProps) => {
@@ -45,12 +45,12 @@ const CommentTable = ({ datas, onHandleDelete }: CommentslListProps) => {
                   <td className="px-6 py-4 text-slate-500">{data.updated_at?.split("T")[0]}</td>
                   <td className="px-6 py-4 text-slate-500">
                     <select
-                      // value={String(data.is_delete)}
-                      // onChange={(e) => onHandlePublic(e.target.value, data.id)}
+                      value={data.is_delete}
+                      onChange={(e) => onHandleDelete(e.target.value, data.comment_id)}
                       className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500"
                     >
-                      <option value="true">공개</option>
-                      <option value="false">삭제</option>
+                      <option value="false">공개</option>
+                      <option value="true">삭제</option>
                     </select>
                   </td>
                 </tr>

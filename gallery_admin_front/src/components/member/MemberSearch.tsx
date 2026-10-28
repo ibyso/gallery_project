@@ -176,8 +176,7 @@ const MemberSearch = ({ searchParams, onSearch, onReset }: MemberSearchProps) =>
                   className={`${inputClass} min-w-36`}
                 >
                   <option value="">전체</option>
-                  <option value="Approved">승인됨</option>
-                  <option value="Pending">승인 대기</option>
+                  <option value="Pending">활성</option>
                   <option value="Rejected">비활성</option>
                 </select>
               </div>

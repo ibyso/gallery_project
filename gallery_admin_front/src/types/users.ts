@@ -20,6 +20,8 @@ export type User = {
   email: string;
   name: string;
   role: "Admin" | "Manager";
+  age: number;
+  gender: string;
   allow: AccountStatus;
 };
 
@@ -31,6 +33,7 @@ export type UserRespoonse = {
   user_id: number;
   name: string;
   email: string;
+  age?: number;
   gender?: string;
   joined_at?: string;
   updated_at?: string;

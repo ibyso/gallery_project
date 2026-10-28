@@ -25,6 +25,7 @@ class CommentResponse(BaseModel):
     content_id: int
     created_at: datetime
     updated_at: datetime
+    is_delete: bool
 
 
 # class CommentPageResponse(BaseModel):
