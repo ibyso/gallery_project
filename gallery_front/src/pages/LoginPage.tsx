@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
+import Logo from "../components/Logo";
 
 const LoginPage = () => {
   const { loginForm, errorMessage, handleChange, handleSubmit } = useLogin();
@@ -8,12 +9,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#fafaf8] px-4">
-      <Link
-        to="/"
-        className="fixed left-6 top-6 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
-      >
-        ▣ Festagram
-      </Link>
+      <Logo className="fixed left-6 top-6" />
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm">
         <h1 className="mb-2 text-2xl font-bold">로그인</h1>
 

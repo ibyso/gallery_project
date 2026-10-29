@@ -8,6 +8,7 @@ import { useFestivalLikes } from "../hooks/useFestivalLikes";
 import useFestivalComments from "../hooks/useFestivalComments";
 import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
+import Logo from "../components/Logo";
 
 const Calendar = () => {
   const [comment, setComment] = useState("");
@@ -37,9 +38,7 @@ const Calendar = () => {
     <div className="min-h-screen bg-[#fafaf8] text-[#292c28]">
       <div className="mx-auto max-w-5xl px-6 py-8">
         <header className="flex items-center justify-between border-b border-gray-200 pb-5">
-          <Link to="/" className="text-xl font-bold">
-            ▣ Festagram
-          </Link>
+          <Logo />
 
           <h1 className="text-lg font-semibold">캘린더</h1>
 
