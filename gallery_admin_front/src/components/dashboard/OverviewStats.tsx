@@ -5,7 +5,6 @@ interface OverviewStatsProps {
   data: OverviewMetrics;
 }
 
-// ⭐ 추가: 누적 핵심 지표와 최근 7일 증가량
 const OverviewStats = ({ data }: OverviewStatsProps) => {
   const items = [
     { title: "전체 회원 수", metric: data.members, unit: "명", icon: FiUsers },

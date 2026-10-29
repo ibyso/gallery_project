@@ -5,6 +5,7 @@ import type { PopularPost } from "../../types/dashboard";
 
 interface PopularPostsChartProps {
   data: PopularPost[];
+  onHandleChange: (data: string) => void;
 }
 
 type RankField = "views" | "likes" | "comments";
@@ -15,8 +16,7 @@ const rankOptions: { value: RankField; label: string; unit: string }[] = [
   { value: "comments", label: "댓글 순", unit: "개" },
 ];
 
-// ⭐ 추가: 인기 게시글 TOP 5를 선택한 기준에 따라 다시 정렬
-const PopularPostsChart = ({ data }: PopularPostsChartProps) => {
+const PopularPostsChart = ({ data, onHandleChange }: PopularPostsChartProps) => {
   const [rankField, setRankField] = useState<RankField>("views");
 
   const rankedPosts = useMemo(
@@ -24,12 +24,17 @@ const PopularPostsChart = ({ data }: PopularPostsChartProps) => {
     [data, rankField],
   );
 
-  // 긴 게시글 제목은 그래프에서 줄여 표시하고, 아래 목록에는 전체 제목을 표시합니다.
+  // 긴 게시글 제목은 그래프에서 줄여 표시하고, 아래 목록에는 전체 제목을 표시
   const chartData = rankedPosts.map((post, index) => ({
     ...post,
     barLabel: `${index + 1}위 ${post.title.length > 7 ? `${post.title.slice(0, 7)}…` : post.title}`,
   }));
   const selectedOption = rankOptions.find((option) => option.value === rankField)!;
+
+  const sortChange = (data: RankField) => {
+    onHandleChange(data);
+    setRankField(data);
+  };
 
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -41,7 +46,7 @@ const PopularPostsChart = ({ data }: PopularPostsChartProps) => {
         <select
           aria-label="인기 게시글 정렬 기준"
           value={rankField}
-          onChange={(event) => setRankField(event.target.value as RankField)}
+          onChange={(event) => sortChange(event.target.value as RankField)}
           className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
         >
           {rankOptions.map((option) => (
