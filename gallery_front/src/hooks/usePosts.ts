@@ -7,7 +7,7 @@ import useFestivalComments from "./useFestivalComments";
 import { postFestivalView } from "../apis/festivalApi";
 
 export function usePosts(currentUserId: number | string | null) {
-  const { posts, setPosts } = useFestivals();
+  const { posts, setPosts, festivalStatus, setFestivalStatus } = useFestivals();
   const [comment, setComment] = useState("");
   const modal = usePostModal(setComment);
   const selectedPost = posts.find((post) => post.id === modal.selectedId);
@@ -29,11 +29,11 @@ export function usePosts(currentUserId: number | string | null) {
     try {
       const result = await postFestivalView(festivalId);
       // 여러 축제의 요청이 겹쳐도 최신 목록의 다른 조회수를 보존
-      setPosts((currentPosts) => currentPosts.map((post) =>
-        post.id === festivalId
-          ? { ...post, views: Math.max(post.views ?? 0, result.views) }
-          : post,
-      ));
+      setPosts((currentPosts) =>
+        currentPosts.map((post) =>
+          post.id === festivalId ? { ...post, views: Math.max(post.views ?? 0, result.views) } : post,
+        ),
+      );
     } catch (error) {
       console.error("조회수 증가 실패:", error);
     }
@@ -42,6 +42,8 @@ export function usePosts(currentUserId: number | string | null) {
   return {
     posts,
     setPosts,
+    festivalStatus,
+    setFestivalStatus,
     selectedPost,
     openPost,
     ...modal,
