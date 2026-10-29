@@ -6,7 +6,11 @@ import {
   type WeatherResponse,
 } from "../apis/weatherApi";
 
-function WeeklyWeather() {
+type WeeklyWeatherProps = {
+  onSelectRegion: (region: WeatherRegion) => void;
+};
+
+function WeeklyWeather({ onSelectRegion }: WeeklyWeatherProps) {
   // 선택된 지역 (기본값: 서울)
   const [selectedRegion, setSelectedRegion] = useState<WeatherRegion>("서울");
 
@@ -76,6 +80,7 @@ function WeeklyWeather() {
                 onClick={() => {
                   setSelectedRegion(region);
                   setIsRegionOpen(false);
+                  onSelectRegion(region);
                 }}
                 className={`cursor-pointer rounded-lg px-3 py-2 text-sm transition-colors ${
                   selectedRegion === region
