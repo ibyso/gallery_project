@@ -15,8 +15,10 @@ const Calendar = () => {
   const { selectedId, setSelectedId, closeModal } = usePostModal(setComment);
   const { currentUserId } = useAuth();
 
-  const { selectedPost, setSelectedPost, handleFestivalClick } =
-    useLikedFestivalDetail(setSelectedId, currentUserId);
+  const { selectedPost, setSelectedPost, handleFestivalClick } = useLikedFestivalDetail(
+    setSelectedId,
+    currentUserId,
+  );
 
   const { likedIds, toggleLike } = useFestivalLikes();
 
@@ -36,7 +38,7 @@ const Calendar = () => {
       <div className="mx-auto max-w-5xl px-6 py-8">
         <header className="flex items-center justify-between border-b border-gray-200 pb-5">
           <Link to="/" className="text-xl font-bold">
-            ▣ HOME
+            ▣ Festagram
           </Link>
 
           <h1 className="text-lg font-semibold">캘린더</h1>
@@ -47,15 +49,11 @@ const Calendar = () => {
         </header>
 
         <section className="mt-12">
-          <p className="mb-3 text-sm font-medium text-[#58654f]">
-            나의 축제 일정
-          </p>
+          <p className="mb-3 text-sm font-medium text-[#58654f]">나의 축제 일정</p>
 
           <h2 className="text-3xl font-bold">좋아요한 축제 캘린더</h2>
 
-          <p className="mt-4 text-sm text-gray-500">
-            관심 있는 축제의 개최 일정을 확인해 보세요.
-          </p>
+          <p className="mt-4 text-sm text-gray-500">관심 있는 축제의 개최 일정을 확인해 보세요.</p>
 
           <FestivalCalendar onFestivalClick={handleFestivalClick} />
         </section>

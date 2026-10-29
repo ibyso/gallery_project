@@ -19,7 +19,7 @@ function Header({ search, setSearch, setCurrentPage }: HeaderProps) {
   return (
     <header className="border-b border-gray-200">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5">
-        <h1 className="text-xl font-bold">▣ HOME</h1>
+        <h1 className="text-xl font-bold">▣ Festagram</h1>
 
         <input
           type="text"

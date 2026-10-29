@@ -22,7 +22,7 @@ const InfoChange = () => {
         {/* 상단 헤더 */}
         <header className="flex items-center justify-between border-b border-gray-200 pb-5">
           <Link to="/" className="text-xl font-bold">
-            ▣ HOME
+            ▣ Festagram
           </Link>
 
           <h2 className="text-lg font-semibold">EDIT PROFILE</h2>
