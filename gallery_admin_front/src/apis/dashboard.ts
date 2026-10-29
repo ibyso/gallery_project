@@ -22,8 +22,6 @@ export const getDailyActivity = async () => {
 
 // 인기 게시글
 export const getPopularPost = async (data: string) => {
-  console.log("data : ", data);
   const response = await axiosInstance.get(`${SERVER_URL}/popular`, { params: { data: data } });
-  console.log("response", response);
   return response.data;
 };
