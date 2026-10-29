@@ -1,6 +1,5 @@
 import type { DashboardData } from "../types/dashboard";
 
-// ⭐ 추가: 실제 API 연동 전 사용할 화면 확인용 예시 데이터
 export const dashboardMock: DashboardData = {
   management: {
     pendingApprovals: 12,

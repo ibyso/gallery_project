@@ -6,7 +6,6 @@ interface ActivityChartProps {
   data: DailyActivity[];
 }
 
-// ⭐ 추가: 7일간 신규 회원 + 작성 댓글 추이
 const ActivityChart = ({ data }: ActivityChartProps) => {
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -31,7 +30,8 @@ const ActivityChart = ({ data }: ActivityChartProps) => {
               <XAxis dataKey="date" tick={{ fill: "#64748b", fontSize: 12 }} tickLine={false} axisLine={false} />
               <YAxis allowDecimals={false} tick={{ fill: "#64748b", fontSize: 12 }} tickLine={false} axisLine={false} />
               <Tooltip contentStyle={{ borderRadius: 10, border: "1px solid #e2e8f0", fontSize: 12 }} />
-              <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+              {/* <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: 12 }} /> */}
+              <Legend height={36} iconType="circle" wrapperStyle={{ fontSize: 12, top: 0 }} />
               <Line
                 type="monotone"
                 dataKey="newMembers"

@@ -5,7 +5,6 @@ interface ManagementStatsProps {
   data: ManagementCounts;
 }
 
-// ⭐ 추가: 관리자 관리 항목 (승인 대기 / 비공개 / 삭제 댓글 / 차단 이용자)
 const ManagementStats = ({ data }: ManagementStatsProps) => {
   const items = [
     { title: "승인 대기", value: data.pendingApprovals, unit: "건", icon: FiUserCheck },
@@ -21,7 +20,7 @@ const ManagementStats = ({ data }: ManagementStatsProps) => {
           <FiShield className="text-slate-500" aria-hidden="true" />
           관리 항목
         </h2>
-        <span className="text-xs text-slate-400">전체 현황</span>
+        <span className="text-xs text-slate-400"></span>
       </div>
 
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">

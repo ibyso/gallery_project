@@ -1,4 +1,3 @@
-// ⭐ 추가: 대시보드 공통 타입
 export interface ManagementCounts {
   pendingApprovals: number;
   privatePosts: number;

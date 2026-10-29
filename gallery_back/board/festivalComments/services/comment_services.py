@@ -19,7 +19,7 @@ def comment_create(data: CommentCreate, db: Session):
 
 # 댓글 조회
 def get_comments_by_content_id(content_id: int, db: Session):
-    stmt = select(Comment).where(Comment.content_id == content_id).order_by(Comment.created_at.asc())
+    stmt = select(Comment).where(Comment.content_id == content_id,Comment.is_delete==False).order_by(Comment.created_at.asc())
     comments = db.scalars(stmt).all()
 
     return [
