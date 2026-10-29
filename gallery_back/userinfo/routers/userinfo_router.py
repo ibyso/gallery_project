@@ -22,7 +22,7 @@ from userinfo.services.userinfo import (
 
 from userinfo.exceptions.userinfo import UserAlreadyExistsException
 from userinfo.utils.security import create_access_token
-from db.models.userinfo import UserInfo
+from db.models.userinfo import UserInfo, UserAllowed
 from core.dependencies import get_current_user
 
 
@@ -73,12 +73,19 @@ def signin(
         data.email,
         data.password
     )
-
+    print("UserCheck",user)
     # 2. 인증 실패
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="이메일 또는 비밀번호가 올바르지 않습니다.",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    # 2-1. 차단된 계정
+    if user.allow == UserAllowed.Rejected :
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="차단된 계정입니다. \n문의:example@festagram.com",
             headers={"WWW-Authenticate": "Bearer"}
         )
 
