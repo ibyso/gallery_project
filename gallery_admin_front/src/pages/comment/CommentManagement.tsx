@@ -63,7 +63,7 @@ const FestivalManagement = () => {
       <CommentSearch searchParams={searchParams} onSearch={handleSearch} onReset={handleReset} />
 
       {/* 관리자 목록 컴포넌트 */}
-      <CommentTable datas={data.items} onHandleDelete={onHandleDelete} />
+      <CommentTable datas={data.items} total_count={data.total} onHandleDelete={onHandleDelete} />
       <Pagination
         currentPage={data.page}
         totalPages={data.total_pages}

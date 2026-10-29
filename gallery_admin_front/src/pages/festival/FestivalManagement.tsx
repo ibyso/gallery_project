@@ -63,7 +63,7 @@ const FestivalManagement = () => {
       <FestivalSearch searchParams={searchParams} onSearch={handleSearch} onReset={handleReset} />
 
       {/* 관리자 목록 컴포넌트 */}
-      <FestivalTable datas={data.items} onHandlePublic={onHandlePublic} />
+      <FestivalTable datas={data.items} total_count={data.total} onHandlePublic={onHandlePublic} />
       <Pagination
         currentPage={data.page}
         totalPages={data.total_pages}

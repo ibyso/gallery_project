@@ -48,7 +48,8 @@ export const useLogin = () => {
       console.error("로그인 오류:", error);
 
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        setErrorMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
+        // setErrorMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
+        setErrorMessage(error.response?.data?.detail ?? "이메일 또는 비밀번호가 올바르지 않습니다.");
       } else {
         setErrorMessage("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
       }

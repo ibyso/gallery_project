@@ -2,17 +2,18 @@ import type { FestivalRespoonse } from "../../types/festivals";
 
 interface FestivalListProps {
   datas: FestivalRespoonse[];
+  total_count: number;
   onHandlePublic: (key: string, user_id: number) => void;
 }
 
-const FestivalTable = ({ datas, onHandlePublic }: FestivalListProps) => {
+const FestivalTable = ({ datas, total_count, onHandlePublic }: FestivalListProps) => {
   return (
     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* 테이블 제목 */}
       <div className="border-b border-slate-200 px-6 py-4">
         <h2 className="text-base font-semibold text-slate-800">
           게시글 목록
-          <span className="ml-2 text-sm font-normal text-blue-600">총 {datas.length}건</span>
+          <span className="ml-2 text-sm font-normal text-blue-600">총 {total_count}건</span>
         </h2>
       </div>
 

@@ -55,7 +55,7 @@ const MemberManagement = () => {
       <MemberSearch searchParams={searchParams} onSearch={handleSearch} onReset={handleReset} />
 
       {/* 회원 목록 컴포넌트 */}
-      <MemberTable members={data.items} onHandleAllow={onHandleAllow} />
+      <MemberTable members={data.items} total_count={data.total} onHandleAllow={onHandleAllow} />
       <Pagination
         currentPage={data.page}
         totalPages={data.total_pages}

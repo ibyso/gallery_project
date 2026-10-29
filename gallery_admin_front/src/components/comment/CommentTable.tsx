@@ -2,17 +2,18 @@ import type { CommentResponse } from "../../types/comments";
 
 interface CommentslListProps {
   datas: CommentResponse[];
+  total_count: number;
   onHandleDelete: (is_delete: string, content_id: number) => void;
 }
 
-const CommentTable = ({ datas, onHandleDelete }: CommentslListProps) => {
+const CommentTable = ({ datas, total_count, onHandleDelete }: CommentslListProps) => {
   return (
     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* 테이블 제목 */}
       <div className="border-b border-slate-200 px-6 py-4">
         <h2 className="text-base font-semibold text-slate-800">
           댓글 목록
-          <span className="ml-2 text-sm font-normal text-blue-600">총 {datas.length}건</span>
+          <span className="ml-2 text-sm font-normal text-blue-600">총 {total_count}건</span>
         </h2>
       </div>
 

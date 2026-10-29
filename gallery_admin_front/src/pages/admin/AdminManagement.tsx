@@ -55,7 +55,7 @@ const AdminManagement = () => {
       <AdminSearch searchParams={searchParams} onSearch={handleSearch} onReset={handleReset} />
 
       {/* 관리자 목록 컴포넌트 */}
-      <AdminTable admins={data.items} onHandleAllow={onHandleAllow} />
+      <AdminTable admins={data.items} total_count={data.total} onHandleAllow={onHandleAllow} />
       <Pagination
         currentPage={data.page}
         totalPages={data.total_pages}
