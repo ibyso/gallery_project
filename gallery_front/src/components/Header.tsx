@@ -19,7 +19,10 @@ function Header({ search, setSearch, setCurrentPage }: HeaderProps) {
   return (
     <header className="border-b border-gray-200">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5">
-        <h1 className="text-xl font-bold">▣ Festagram</h1>
+        <Link to="/" aria-label="페스타그램 홈" className="inline-flex shrink-0 items-center gap-2">
+          <img src="/festagram-mark.png" alt="" className="h-12 w-12 object-contain" />
+          <span className="text-xl font-bold text-[#292c28]">Festagram</span>
+        </Link>
 
         <input
           type="text"

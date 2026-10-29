@@ -7,6 +7,7 @@ import { usePostModal } from "../hooks/usePostModal";
 import useFestivalComments from "../hooks/useFestivalComments";
 import { useComments } from "../hooks/useComments";
 import PostModal from "../components/PostModal";
+import Logo from "../components/Logo";
 
 const FestivalLike = () => {
   const { likes, loading, errorMessage, likedIds, toggleLike, likeCounts } = useFestivalLikes();
@@ -42,9 +43,7 @@ const FestivalLike = () => {
       <div className="mx-auto max-w-5xl px-6 py-8">
         {/* 상단 헤더 */}
         <header className="flex items-center justify-between border-b border-gray-200 pb-5">
-          <Link to="/" className="text-xl font-bold">
-            ▣ Festagram
-          </Link>
+          <Logo />
 
           <h1 className="text-lg font-semibold">좋아요 목록</h1>
 
