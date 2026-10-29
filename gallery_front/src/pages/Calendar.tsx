@@ -13,11 +13,10 @@ const Calendar = () => {
   const [comment, setComment] = useState("");
 
   const { selectedId, setSelectedId, closeModal } = usePostModal(setComment);
+  const { currentUserId } = useAuth();
 
   const { selectedPost, setSelectedPost, handleFestivalClick } =
-    useLikedFestivalDetail(setSelectedId);
-
-  const { currentUserId } = useAuth();
+    useLikedFestivalDetail(setSelectedId, currentUserId);
 
   const { likedIds, toggleLike } = useFestivalLikes();
 
@@ -48,11 +47,15 @@ const Calendar = () => {
         </header>
 
         <section className="mt-12">
-          <p className="mb-3 text-sm font-medium text-[#58654f]">나의 축제 일정</p>
+          <p className="mb-3 text-sm font-medium text-[#58654f]">
+            나의 축제 일정
+          </p>
 
           <h2 className="text-3xl font-bold">좋아요한 축제 캘린더</h2>
 
-          <p className="mt-4 text-sm text-gray-500">관심 있는 축제의 개최 일정을 확인해 보세요.</p>
+          <p className="mt-4 text-sm text-gray-500">
+            관심 있는 축제의 개최 일정을 확인해 보세요.
+          </p>
 
           <FestivalCalendar onFestivalClick={handleFestivalClick} />
         </section>

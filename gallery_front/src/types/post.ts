@@ -9,6 +9,7 @@ export type Post = {
   startdate?: string | null;
   enddate?: string | null;
   program?: string | null;
+  views?: number;
   comments: string[];
 };
 
@@ -30,4 +31,5 @@ export type FestivalListItem = {
   startdate: string | null;
   enddate: string | null;
   program: string | null;
+  views: number;
 };
