@@ -43,7 +43,12 @@ function App() {
       {/* 메인 콘텐츠 */}
       <main className="mx-auto max-w-7xl px-6 py-12">
         {/* 서울 7일 날씨 */}
-        <WeeklyWeather />
+        <WeeklyWeather
+          onSelectRegion={(region) => {
+            setSearch(region);
+            setCurrentPage(1);
+          }}
+        />
 
         <h2 className="mb-3 text-3xl font-semibold">현재 진행중인 축제</h2>
 
