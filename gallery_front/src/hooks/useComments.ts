@@ -27,7 +27,7 @@ export const useComments = (
       contentId === null ||
       currentUserId === null ||
       !body ||
-      body.length > 500
+      body.length > 150
     )
       return;
 
