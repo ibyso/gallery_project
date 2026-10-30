@@ -25,6 +25,8 @@ axiosInstance.interceptors.response.use(
       sessionStorage.removeItem("access_token");
       location.href = "/login";
     }
+
+    throw error;
   },
 );
 

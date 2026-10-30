@@ -1,3 +1,4 @@
+import axios from "axios";
 import { patchAdminAllows } from "../../apis/userApi";
 import AdminSearch from "../../components/admin/AdminSearch";
 import AdminTable from "../../components/admin/AdminTable";
@@ -38,7 +39,18 @@ const AdminManagement = () => {
       alert(result.message);
       fetchData();
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        console.log(error.response);
+        const detail = error.response?.data.detail;
+        console.log(detail);
+        if (Array.isArray(detail)) {
+          alert(detail[0].msg ?? "실패했습니다.");
+        } else {
+          alert(detail ?? "실패했습니다.");
+        }
+      } else {
+        console.log(error);
+      }
     }
   };
 

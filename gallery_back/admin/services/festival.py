@@ -82,7 +82,7 @@ def select_all_festivals(db: Session, data: FestivalSearchParams, current_user:U
 # 게시글 활성/비활성
 def update_festival_public(db: Session, id:int, is_public:bool, current_user:UserInfo):
     # 접근 제어
-    if current_user.role != UserRole.Admin or current_user.allow != UserAllowed.Approved :
+    if current_user.role not in (UserRole.Admin, UserRole.Manager) or current_user.allow != UserAllowed.Approved :
         raise AdminPermissionDeniedError
     
     festival = db.get(Festival, id)

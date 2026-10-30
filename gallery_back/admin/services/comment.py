@@ -83,7 +83,7 @@ def select_all_comments(db: Session, data: CommentSearchParams, current_user:Use
 # # 게시글 활성/비활성
 def delete_comment(db: Session, id:int, is_delete:bool, current_user:UserInfo):
     # 접근 제어
-    if current_user.role != UserRole.Admin or current_user.allow != UserAllowed.Approved :
+    if current_user.role not in (UserRole.Admin, UserRole.Manager) or current_user.allow != UserAllowed.Approved :
         raise AdminPermissionDeniedError
     
     comment = db.get(Comment, id)
