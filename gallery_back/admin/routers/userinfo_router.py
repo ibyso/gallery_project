@@ -6,7 +6,7 @@ from db.models.userinfo import UserInfo
 from core.dependencies import get_current_user
 from admin.schemas.userinfo import UserInfoCreate, UserInfoLogin, UserInfoResponse, Token
 from admin.services.userinfo import register_admin, authenticate_admin
-from admin.exceptions.admin_userinfo import AdminNotAcceptException
+from admin.exceptions.admin_userinfo import AdminNotAcceptException, AdminRejectException
 from userinfo.exceptions.userinfo import UserAlreadyExistsException, UserNotFoundException, InvalidPasswordException
 
 # 회원 관련 API Router
@@ -54,7 +54,7 @@ def signin(data: UserInfoLogin, db: Session = Depends(get_db)):
             detail="회원가입 대기중인 계정입니다. \n문의:010-xxxx-xxxx",
         )
 
-    except AdminNotAcceptException:
+    except AdminRejectException:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="회원가입이 거부된 계정입니다. \n문의:010-xxxx-xxxx",

@@ -22,7 +22,7 @@ async def get_comments(
     db: Session = Depends(get_db)
     ):
 
-    if current_user.role not in ["Admin","Manger"] or current_user.allow != "Approved" :
+    if current_user.role not in ["Admin","Manager"] or current_user.allow != "Approved" :
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="조회 권한이 없습니다.",

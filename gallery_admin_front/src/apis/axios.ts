@@ -21,9 +21,9 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response?.status === 401 && error.config?.url !== "/users/signin") {
+    if (error.response?.status === 401 && error.config?.url !== "/login") {
       sessionStorage.removeItem("access_token");
-      location.href = "/users/signin";
+      location.href = "/login";
     }
   },
 );
