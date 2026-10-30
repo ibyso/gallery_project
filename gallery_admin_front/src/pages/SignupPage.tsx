@@ -46,7 +46,7 @@ const SignupPage = () => {
         name: name,
         password: password,
       });
-      alert(`${result.user_id}님 ${result.message}`);
+      alert(`${result.user_id}님 환영합니다.`);
       navigate("/login");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -146,7 +146,7 @@ const SignupPage = () => {
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <FiLogIn size={17} />
-            {isLoading ? "로그인 중..." : "로그인"}
+            {isLoading ? "가입 중..." : "회원가입"}
           </button>
         </form>
 
