@@ -76,7 +76,7 @@ def update_allow_member(db: Session, user_id:int, allow_status:str, current_user
         raise AdminInvalidAllowedException
 
     # 접근 제어
-    if current_user.role != UserRole.Admin or current_user.allow != UserAllowed.Approved :
+    if current_user.role not in (UserRole.Admin, UserRole.Manager) or current_user.allow != UserAllowed.Approved :
         raise AdminPermissionDeniedError
     
     user = db.get(UserInfo, user_id)

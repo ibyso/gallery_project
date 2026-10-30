@@ -46,7 +46,7 @@ async def patch_admins(user_id:int, allow_status:str, current_user:UserInfo=Depe
         )
     except AdminPermissionDeniedError:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="권한이 없습니다.",
         )
 
