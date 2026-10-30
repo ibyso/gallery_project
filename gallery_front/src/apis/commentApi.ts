@@ -24,11 +24,21 @@ export const getComments = async (contentId: number) => {
 };
 
 export const putComment = async (comment_id: number, comment: CommentUpdate) => {
-  const response = await axios.put(`${url}/${comment_id}`, comment);
+  const token = sessionStorage.getItem("access_token");
+  const response = await axios.put(`${url}/${comment_id}`, comment,{
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
 export const deleteComment = async (comment_id: number) => {
-  const response = await axios.delete(`${url}/${comment_id}`);
+  const token = sessionStorage.getItem("access_token");
+  const response = await axios.delete(`${url}/${comment_id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };

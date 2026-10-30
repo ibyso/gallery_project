@@ -34,7 +34,7 @@ async def get_comments(content_id: int, db:  Session = Depends(get_db)):
 @comment_router.put("/{comment_id}", response_model=dict)
 async def put_comment(comment_id: int, data: CommentUpdate, db: Session = Depends(get_db), current_user: UserInfo = Depends(get_current_user)):
     try:
-        id = update_comment(comment_id=comment_id, data=data, db=db)
+        id = update_comment(comment_id=comment_id, data=data, db=db, current_user_id=current_user.user_id)
     except CommentNotFoundException:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="수정할 댓글이 없습니다.")
 
@@ -45,7 +45,7 @@ async def put_comment(comment_id: int, data: CommentUpdate, db: Session = Depend
 @comment_router.delete("/{comment_id}", response_model=dict)
 async def delete_comment(comment_id: int, db: Session = Depends(get_db), current_user: UserInfo = Depends(get_current_user)):
     try:
-        delete_comment_service(comment_id=comment_id, db=db)
+        delete_comment_service(comment_id=comment_id, db=db, current_user_id=current_user.user_id)
     except CommentNotFoundException:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="삭제할 댓글이 없습니다.")
 

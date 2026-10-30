@@ -216,12 +216,12 @@ function PostModal({
                         aria-label="댓글 수정 내용"
                         value={editingComment}
                         onChange={(e) => setEditingComment(e.target.value)}
-                        maxLength={500}
+                        maxLength={150}
                         className="h-24 w-full resize-none rounded border border-gray-200 p-3 text-sm outline-none focus:border-[#58654f]"
                       />
                       <div className="mt-2 flex items-center justify-between gap-2">
                         <span className="text-xs text-gray-400">
-                          {editingComment.length} / 500
+                          {editingComment.length} / 150
                         </span>
                         <div className="flex gap-2">
                           <button
@@ -272,7 +272,7 @@ function PostModal({
 
             <div className="mt-2 flex items-center justify-between">
               <span className="text-xs text-gray-400">
-                {comment.length} / 500
+                {comment.length} / 150
               </span>
 
               <button
